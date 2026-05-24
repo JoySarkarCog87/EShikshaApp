@@ -1,147 +1,91 @@
-<div class="container py-5 adminPanel">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="dashboard-title text-center text-md-start">LMS Insights Engine</h1>
-        <span class="badge bg-white text-dark shadow-sm p-2 px-3 mb-4 rounded-pill">
-            <i class="bi bi-calendar2-week-fill"></i> April 2026
-        </span>
-    </div>
-
-    <div class="row g-4 mb-5">
-        <div class="col-md-6">
-            <div class="card metric-card-lrg p-4 h-100">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-soft-purple me-4">
-                        <i class="bi bi-backpack3"></i>
+@if(dashboardData()){
+    <div class="container py-5 adminPanel">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="dashboard-title text-center text-md-start">LMS Insights Engine</h1>
+            <span class="badge bg-white text-dark shadow-sm p-2 px-3 mb-4 rounded-pill">
+                <i class="bi bi-calendar2-week-fill"></i> {{currentDate | date:'mediumDate'}}
+            </span>
+        </div>
+    
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card metric-card-lrg p-4 h-100">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box bg-soft-purple me-4">
+                            <i class="bi bi-backpack3"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted fw-semibold">Total Community Size</span>
+                            <h2 class="display-5 fw-bold mb-0">{{getTotalUser()}}</h2>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-muted fw-semibold">Total Community Size</span>
-                        <h2 class="display-5 fw-bold mb-0">3,450</h2>
+                    <div class="mt-4 pt-3 border-top d-flex gap-3">
+                        <div class="flex-fill">
+                            <small class="text-muted d-block">Students</small>
+                            <div class="fw-bold">{{dashboardData()?.userDetails?.totalUser[0]?.total??0}}</div>
+                        </div>
+                        <div class="flex-fill">
+                            <small class="text-muted d-block">Instructors</small>
+                            <div class="fw-bold">{{dashboardData()?.userDetails?.totalUser[0]?.total??0}}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-4 pt-3 border-top d-flex gap-3">
-                    <div class="flex-fill">
-                        <small class="text-muted d-block">Students</small>
-                        <div class="fw-bold">2,800</div>
+            </div>
+            <div class="col-md-6">
+                <div class="card metric-card-lrg p-4 h-100">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box bg-soft-emerald me-4">
+                            <i class="bi bi-person-workspace"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted fw-semibold">Total Courses</span>
+                            <h2 class="display-5 fw-bold mb-0">{{dashboardData()?.courseDetails?.totalCourses}}</h2>
+                        </div>
                     </div>
-                    <div class="flex-fill">
-                        <small class="text-muted d-block">Instructors</small>
-                        <div class="fw-bold">650</div>
+                    <hr>
+                    <div>
+                        <p class="text-muted"><i class="bi bi-star-fill text-warning"></i> Highest Rating</p>
+                        <span>{{dashboardData()?.courseDetails.topCourses[0].averageRating}}</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card metric-card-lrg p-4 h-100">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-soft-emerald me-4">
-                        <i class="bi bi-person-workspace"></i>
+    
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Joining Velocity</span>
+                        <i class="fa-solid fa-ellipsis-vertical text-muted cursor-pointer"></i>
                     </div>
-                    <div>
-                        <span class="text-muted fw-semibold">Total Courses</span>
-                        <h2 class="display-5 fw-bold mb-0">128</h2>
+                    <div class="card-body">
+                        <div style="height: 300px; background: #f8fafc; border-radius: 15px;" class="d-flex align-items-center justify-content-center border-dashed">
+                            @if(lineChartData()!==null){
+                                <canvas
+                                baseChart
+                                [data]="lineChartData()"
+                                [options]="lineChartOptions",
+                                [type]="'line'"
+                                ></canvas>
+                            }
+                        </div>
                     </div>
-                </div>
-                <div class="mt-4 pt-3 border-top">
-                    <span class="badge rounded-pill bg-warning text-dark px-3">15 Courses Pending Review</span>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card shadow-sm h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Enrollment Velocity</span>
-                    <i class="fa-solid fa-ellipsis-vertical text-muted cursor-pointer"></i>
-                </div>
+            <div class="col-lg-4 card shadow-sm">
+                <div class="card-header">Popular Courses</div>
                 <div class="card-body">
-                    <div style="height: 300px; background: #f8fafc; border-radius: 15px;" class="d-flex align-items-center justify-content-center border-dashed">
-                        <!-- <div class="text-center text-muted">
-                            <i class="fa-solid fa-chart-line fa-3x mb-3 opacity-25"></i>
-                            <p>Visualizing 12-month growth data...</p>
-                        </div> -->
-                        <canvas
-                        baseChart
-                        [data]="lineChartData"
-                        [options]="lineChartOptions",
-                        [type]="'line'"
-                        ></canvas>
+                    @for(course of dashboardData()?.courseDetails.topCourses; track $index){
+                        <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small fw-bold">{{course.title}}</span>
+                            <span class="small">{{getCoursePercentange(course.averageRating)}}%</span>
+                        </div>
+                        <div class="completion-bar"><div class="completion-fill" style="width: 92%" [ngStyle]="{'width': `${getCoursePercentange(course.averageRating)}%`}"></div></div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 card shadow-sm">
-            <div class="card-header">Popular Courses</div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between mb-1">
-                        <span class="small fw-bold">Intro to Python</span>
-                        <span class="small">92%</span>
-                    </div>
-                    <div class="completion-bar"><div class="completion-fill" style="width: 92%"></div></div>
-                </div>
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between mb-1">
-                        <span class="small fw-bold">Digital Marketing</span>
-                        <span class="small">78%</span>
-                    </div>
-                    <div class="completion-bar"><div class="completion-fill" style="width: 78%"></div></div>
-                </div>
-                <div class="mb-0">
-                    <div class="d-flex justify-content-between mb-1">
-                        <span class="small fw-bold">BIM Rating</span>
-                        <span class="small">78%</span>
-                    </div>
-                    <div class="completion-bar"><div class="completion-fill" style="width: 78%"></div></div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header border-0 pb-0">
-                    <h5 class="mb-0">Elite Instructors</h5>
-                </div>
-                <div class="table-responsive p-3">
-                    <table class="table table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th>Instructor</th>
-                                <th>Active Courses</th>
-                                <th>Rating</th>
-                                <th class="text-end">Performance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="instructor-avatar me-3">JD</div>
-                                        <span class="fw-bold">John Doe</span>
-                                    </div>
-                                </td>
-                                <td>38</td>
-                                <td><i class="fa-solid fa-star text-warning me-1"></i> 5.0</td>
-                                <td class="text-end"><span class="badge bg-soft-purple">Platinum</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="instructor-avatar me-3" style="background: #10b981;">SJ</div>
-                                        <span class="fw-bold">Sarah J.</span>
-                                    </div>
-                                </td>
-                                <td>27</td>
-                                <td><i class="fa-solid fa-star text-warning me-1"></i> 4.8</td>
-                                <td class="text-end"><span class="badge bg-soft-emerald">Gold</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+}

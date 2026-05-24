@@ -1,0 +1,97 @@
+
+.forum-wrapper {
+  background-color: #0f172a;
+  min-height: 100vh;
+}
+
+.forum-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.forum-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  border-color: #818cf8;
+}
+
+
+
+.replies-section {
+  border-left: 2px solid rgba(129, 140, 248, 0.3); 
+  padding-left: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.reply-bubble {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s;
+}
+
+.reply-bubble:hover {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.text-info {
+  color: #22d3ee !important; 
+}
+
+
+
+.input-group .form-control {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border-color: #334155 !important;
+  color: white !important;
+  border-radius: 8px 0 0 8px !important;
+}
+
+.input-group .form-control:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+}
+
+.input-group .btn-primary {
+  background-color: #818cf8;
+  border: none;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 0 1.5rem;
+}
+
+
+.reply-count {
+  background: rgba(15, 23, 42, 0.8);
+  min-width: 65px;
+}
+
+.btn-neon {
+  background: transparent;
+  border: 1px solid #818cf8;
+  color: #818cf8;
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+}
+
+.btn-neon:hover {
+  background: #818cf8;
+  color: white;
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.5);
+}
+
+.post-form-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.replies-counter-box h4 {
+    color: #ffffff !important; 
+}
+
+.replies-counter-box small, 
+.replies-counter-box span {
+    color: #cbd5e1 !important; 
+}

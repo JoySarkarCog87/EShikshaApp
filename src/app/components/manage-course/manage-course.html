@@ -1,6 +1,6 @@
 <div class="container-fluid py-4">
   <div class="row g-4">
-    
+
     <div class="col-lg-7">
       <div class="card shadow-sm border-0">
         <div class="card-header bg-white py-3 border-bottom">
@@ -12,14 +12,14 @@
               <label class="form-label fw-semibold">Course Name</label>
               <input type="text" class="form-control" formControlName="title" placeholder="Enter course title">
             </div>
-            
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Category</label>
               <select class="form-select" formControlName="category">
                 <option value="" disabled>Choose category...</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Professional">Professional</option>
-                <option value="Advanced">Advanced</option>
+                <option value="beginner">Beginner</option>
+                <option value="professional">Professional</option>
+                <option value="advanced">Advanced</option>
               </select>
             </div>
 
@@ -27,18 +27,26 @@
               <label class="form-label fw-semibold">Description</label>
               <textarea class="form-control" formControlName="description" rows="5"></textarea>
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Image URL</label>
-              <input type="text" class="form-control" formControlName="imgUrl" placeholder="Enter an URL">
+              <input type="text" class="form-control" formControlName="imageUrl" placeholder="Enter an URL">
             </div>
-            
+<!-- 
+            @if (courseForm.get('imageUrl')?.value) {
+            <div>
+              <img [src]="courseForm.get('imageUrl')?.value" alt="Preview" style="max-width: 100%; margin-top: 10px;">
+            </div>
+            } -->
+
+
             <div class="d-flex gap-2 pt-3 border-top">
-              <button type="submit" [disabled]="courseForm.invalid" 
+              <button type="submit" [disabled]="courseForm.invalid"
                 [class]="isEditMode() ? 'btn btn-primary' : 'btn btn-success'">
                 {{ isEditMode() ? 'Update Course' : 'Create Course' }}
               </button>
               @if(isEditMode()) {
-                <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Cancel</button>
+              <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Cancel</button>
               }
             </div>
           </form>
@@ -55,28 +63,28 @@
 
         <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;">
           @for (course of courseList(); track course._id) {
-            <div class="list-group-item p-3">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <h6 class="mb-1 fw-bold">{{ course.title }}</h6>
-                  <span class="badge bg-success-subtle text-success border border-success-subtle">
-                     {{ course.category }}
-                  </span>
-                </div>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-outline-primary" (click)="editCourse(course)">
-                    <i class="bi bi-pencil"></i> Edit
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course?._id??'')">
-                    <i class="bi bi-trash"></i> Delete
-                  </button>
-                </div>
+          <div class="list-group-item p-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="mb-1 fw-bold">{{ course.title }}</h6>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                  {{ course.category }}
+                </span>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary" (click)="editCourse(course)">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course?._id??'')">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
               </div>
             </div>
+          </div>
           } @empty {
-            <div class="p-5 text-center text-muted">
-              <p>No courses available. Please create one.</p>
-            </div>
+          <div class="p-5 text-center text-muted">
+            <p>No courses available. Please create one.</p>
+          </div>
           }
         </div>
       </div>

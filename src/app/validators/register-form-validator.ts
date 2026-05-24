@@ -24,7 +24,7 @@ export class RegisterFormValidator {
         if (Object.keys(confirmPassword.errors).length === 0) {
           confirmPassword.setErrors(null);
         }
-      }
+      } 
       return null;
     }
   };

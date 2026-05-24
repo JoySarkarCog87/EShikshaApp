@@ -9,6 +9,12 @@ export const studentRoutes : Routes = [
         {path:"settings", loadComponent:()=>import("../components/settings/settings").then(r=>r.Settings)},
         {path:"enrolledcourses", loadComponent:()=>import("./enrolled-courses/enrolled-courses").then(r=>r.EnrolledCourses)},
         {path:"enrolledcourses/result", loadComponent:()=>import("./result/result").then(r=>r.Result)},
-        {path:"enrolledcourses/coursedetails/:courseId", loadComponent:()=>import("../components/course-details/course-details").then(r=>r.CourseDetails)}
+        {path:"enrolledcourses/course", loadComponent:()=>import("./course-content/course-content").then(r=>r.CourseContent)},
+        {path:"announcement",loadComponent:()=>import("../components/announcements/announcements").then(r=>r.Announcements)},
+        {path:"chat-box", loadComponent:()=>import("../components/chat-box/chat-box.component").then(r=>r.ChatBoxComponent)},
+        {path:"community-forum",loadComponent:()=>import("../components/community-forum/community-forum").then(r=>r.CommunityForumComponent)},
+        {path:"enrolledcourses/coursedetails/:courseId", loadComponent:()=>import("../components/course-details/course-details").then(r=>r.CourseDetails)},
+        {path:"enrolledcourses/coursedetails/:courseId/assignment/:id",loadComponent:()=>import("../student/student-assignment/student-assignment").then(r=>r.StudentAssignment)},
+        {path:"chat-box",loadComponent:()=>import("../components/chat-box/chat-box.component").then(r=>r.ChatBoxComponent)},
     ]}
 ]

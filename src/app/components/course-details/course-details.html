@@ -1,35 +1,35 @@
 @if (selectedCourse(); as data) {
+@if(enrollmentAccessStatus() | async; as status){
 <div class="course-page-wrapper bg-light min-vh-100">
-  <!-- Modern Hero Header -->
-  <header class="hero-section position-relative py-5 text-white" 
-          [style.background]="'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url(' + data.course.imageUrl + ')'"
-          style="background-size: cover; background-position: center;">
+  <header class="hero-section position-relative py-5 text-white"
+    [style.background]="'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url(' + data.course.imageUrl + ')'"
+    style="background-size: cover; background-position: center;">
     <div class="container py-4">
       <div class="row g-5 align-items-center">
-        <!-- Left: Course Narrative -->
         <div class="col-lg-7">
           <span class="badge rounded-pill bg-success mb-3 px-3 py-2 text-uppercase fw-bold ls-1">
             {{ data?.course?.category }}
           </span>
-          
+
           <h1 class="display-3 fw-bold mb-4">{{ data?.course?.title }}</h1>
-          
+
           <div class="d-flex align-items-center gap-4 mb-4">
             <div class="d-flex align-items-center">
               <i class="bi bi-star-fill text-warning me-2"></i>
-              <span class="fw-bold fs-5">{{ data?.course?.rating?.average }}</span>
+              <span class="fw-bold fs-5">{{ data?.course?.rating?.average?.$numberDecimal }}</span>
               <span class="ms-1 opacity-75">({{ data?.course?.rating?.totalUsers }} reviews)</span>
             </div>
             <div class="vr opacity-50"></div>
             <div>
               <i class="bi bi-people-fill me-2 text-info"></i>
-              <span class="fw-bold">{{ data?.course?.enrolments }}</span> Students
+              <span class="fw-bold">{{ data?.totalEnrollments }}</span> Students
             </div>
           </div>
-
-          <!-- Instructor Quick Info -->
-          <div class="d-flex align-items-center p-3 rounded-4 bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-25 shadow-sm w-fit">
-            <div class="avatar-circle bg-success text-white me-3 d-flex align-items-center justify-content-center shadow" style="width: 50px; height: 50px;">
+          <div
+            class="d-flex align-items-center p-3 rounded-4 bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-25 shadow-sm w-fit">
+            <div
+              class="avatar-circle bg-success text-white me-3 d-flex align-items-center justify-content-center shadow"
+              style="width: 50px; height: 50px;">
               <i class="bi bi-person-fill fs-4"></i>
             </div>
             <div>
@@ -38,86 +38,99 @@
             </div>
           </div>
         </div>
-
-        <!-- Right: Action Sidebar Preview -->
+        @if(status!=='blocked'){
         <div class="col-lg-5 d-none d-lg-block">
           <div class="card border-0 rounded-4 shadow-lg overflow-hidden transition-hover">
-            <img [src]="data.course.imageUrl" class="card-img-top" alt="Course Thumbnail" style="height: 250px; object-fit: cover;">
+            <img [src]="data.course.imageUrl" class="card-img-top" alt="Course Thumbnail"
+              style="height: 250px; object-fit: cover;">
             <div class="card-body p-4 text-dark text-center">
               <h4 class="fw-bold mb-3">Begin Your Journey</h4>
-              <button class="btn btn-success btn-lg w-100 py-3 rounded-pill fw-bold shadow" (click)="enroll()">
-                Enroll Now <i class="bi bi-rocket-takeoff ms-2"></i>
+              @if(data?.isEnrolled){
+              <button class="btn btn-danger btn-lg w-100 py-3 rounded-pill fw-bold shadow" (click)="unrenroll()">
+                UnEnroll <i class="bi bi-shield-fill-x text-warning"></i>
               </button>
+              }@else{
+              <button class="btn btn-success btn-lg w-100 py-3 rounded-pill fw-bold shadow" (click)="enroll()">
+                Enroll Now
+                <i class="bi bi-rocket-takeoff ms-2"></i>
+              </button>
+              }
             </div>
           </div>
         </div>
+        }
       </div>
     </div>
   </header>
 
-  <!-- Main Content Body -->
   <main class="container py-5">
     <div class="row g-5">
-      <!-- Left Column: Details & Curriculum -->
       <div class="col-lg-8">
-        <!-- About Section -->
         <section class="mb-5">
           <h3 class="fw-bold mb-4 border-start border-4 border-success ps-3">About this Course</h3>
           <p class="fs-5 text-secondary lh-lg">
             {{ data?.course?.description }}
           </p>
         </section>
-
-        <!-- Curriculum Section -->
         <section class="mb-5">
           <div class="d-flex justify-content-between align-items-end mb-4">
             <h3 class="fw-bold mb-0 border-start border-4 border-primary ps-3">Learning Path</h3>
             <span class="text-muted small fw-bold">
-              {{ data?.assignments?.length }} TOTAL MODULES
+              {{ (data?.assignments?.length ?? 0) + (data?.quizzes?.length ?? 0) }} TOTAL MODULES
             </span>
-          </div>
 
-          <!-- Quizzes 
+          </div>
           <h5 class="text-uppercase small fw-bold text-muted mb-3 mt-4">Knowledge Checks</h5>
           <div class="vstack gap-3 mb-4">
             @for (quiz of data.quizzes; track quiz._id) {
-              <div class="p-3 bg-white border rounded-3 d-flex align-items-center shadow-sm hover-shadow transition-all">
-                <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3 p-2 me-3">
-                  <i class="bi bi-lightning-charge-fill fs-5"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <h6 class="mb-0 fw-bold text-dark">{{ quiz.title }}</h6>
-                  <small class="text-muted">{{ quiz.questions }} Questions</small>
-                </div>
-                <i class="bi bi-chevron-right text-muted"></i>
+            <div class="p-3 bg-white border rounded-3 d-flex align-items-center shadow-sm hover-shadow transition-all">
+              <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3 p-2 me-3">
+                <i class="bi bi-lightning-charge-fill fs-5"></i>
               </div>
+              <div class="flex-grow-1">
+                <h6 class="mb-0 fw-bold text-dark">{{ quiz.title }}</h6>
+                <small class="text-muted">{{ quiz.totalQuestions }} Questions</small>
+              </div>
+              @if(data?.isEnrolled){
+              <button class="border-0 bg-transparent" (click)="startQuiz(quiz._id)">
+                <i class="bi bi-play-fill text-success fs-2 cursor-pointer"></i>
+              </button>
+              }@else{
+              <i class="bi bi-lock-fill text-danger"></i>
+              }
+
+            </div>
             }
           </div>
--->
-          <!-- Assignments -->
-          <h5 class="text-uppercase small fw-bold text-muted mb-3">Hands-on Projects</h5>
           <div class="vstack gap-3">
+            <h3 class="text-uppercase small fw-bold text-muted mb-3">Assignments</h3>
             @for (task of data.assignments; track task.title) {
-              <div class="p-3 bg-white border rounded-3 d-flex align-items-center shadow-sm hover-shadow transition-all">
-                <div class="icon-box bg-info bg-opacity-10 text-info rounded-3 p-2 me-3">
-                  <i class="bi bi-code-square fs-5"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <h6 class="mb-0 fw-bold text-dark">{{ task.title }}</h6>
-                  <small class="text-muted">Due: {{ task.dueDate | date:'mediumDate' }} • {{ task.totalMarks }} Marks</small>
-                </div>
-                @if(hasAccess()){
-                  <i class="bi bi-download text-primary"></i>
-                }@else{
-                  <i class="bi bi-lock-fill text-danger"></i>
-                }
+            <div class="p-3 bg-white border rounded-3 d-flex align-items-center shadow-sm hover-shadow transition-all">
+              <div class="icon-box bg-info bg-opacity-10 text-info rounded-3 p-2 me-3">
+                <i class="bi bi-code-square fs-5"></i>
               </div>
+              <div class="flex-grow-1">
+                <h6 class="mb-0 fw-bold text-dark">{{ task.title }}</h6>
+                <small class="text-muted">Due: {{ task.dueDate | date:'mediumDate' }} • {{ task.totalMarks }}
+                  Marks</small>
+              </div>
+              @if(data?.isEnrolled){
+              @if(marksArray() && marksArray()?.[task._id]){
+              <span class="badge bg-success-subtle fs-6 px-3 py-2">
+                {{ marksArray()?.[task._id] }} / {{ task.totalMarks }}
+              </span>
+              }@else{
+              <button class="btn btn-success" (click)="goToSubmitAssignment(task)">Submit</button>
+              }
+              }
+              @else{
+              <i class="bi bi-lock-fill text-danger"></i>
+              }
+            </div>
             }
           </div>
         </section>
       </div>
-
-      <!-- Right Column: Stats & Enrollment (Sticky) -->
       <div class="col-lg-4">
         <div class="sticky-top" style="top: 2rem; z-index: 10;">
           <div class="card border-0 shadow rounded-4 mb-4">
@@ -137,11 +150,6 @@
                   <span class="fw-bold">All Platform</span>
                 </div>
               </div>
-              <div class="d-grid mt-4">
-                <button class="btn btn-dark btn-lg rounded-3 py-3 fw-bold" (click)="enroll()">
-                  Get Started
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -149,9 +157,87 @@
     </div>
   </main>
 </div>
-} @else {
-  <div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
-    <div class="spinner-border text-success mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
-    <p class="text-muted fw-medium">Launching your mission...</p>
+<!-- Feedback Submission Section: Only visible if enrolled -->
+@if(data?.isEnrolled){
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <h5 class="card-title fw-bold mb-3 text-dark">Leave Your Feedback</h5>
+
+      <div class="mb-4 bg-light p-3 rounded-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label for="ratingRange" class="form-label fw-semibold text-secondary mb-0">Your Rating</label>
+          <div class="d-flex align-items-center gap-2">
+            @if (selectedRating === 0) {
+              <span class="badge bg-danger px-3 py-2 fs-6">0 - Bad <i class="bi bi-emoji-frown-fill ms-1"></i></span>
+            } @else if (selectedRating > 0 && selectedRating < 3.5) {
+              <span class="badge bg-warning text-dark px-3 py-2 fs-6">{{ selectedRating }} - Average <i class="bi bi-emoji-neutral-fill ms-1"></i></span>
+            } @else if (selectedRating >= 3.5 && selectedRating < 5) {
+              <span class="badge bg-info text-dark px-3 py-2 fs-6">{{ selectedRating }} - Good <i class="bi bi-emoji-smile-fill ms-1"></i></span>
+            } @else if (selectedRating === 5) {
+              <span class="badge bg-success px-3 py-2 fs-6">5 - Excellent Model <i class="bi bi-stars ms-1"></i></span>
+            }
+          </div>
+        </div>
+        <input 
+          type="range" 
+          class="form-range custom-slider" 
+          id="ratingRange" 
+          min="0" 
+          max="5" 
+          step="0.5" 
+          [(ngModel)]="selectedRating">
+          
+        <div class="d-flex justify-content-between text-muted small px-1 mt-1 fw-medium">
+          <span>0 (Bad)</span>
+          <span>1.0</span>
+          <span>2.0</span>
+          <span>3.0</span>
+          <span class="text-info fw-bold">3.5 (Good)</span>
+          <span>4.0</span>
+          <span class="text-success fw-bold">5.0 (Excellent)</span>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <input type="text" class="form-control form-control-lg border-end-0 bg-light" [(ngModel)]="feedback" placeholder="Share your experience with this course...">
+        <button class="btn btn-primary px-4 fw-semibold border-start-0" type="button" (click)="submitReview()">
+          <i class="bi bi-send-fill me-2"></i>Submit
+        </button>
+      </div>
+    </div>
   </div>
+}
+
+<!-- Feedbacks List Section -->
+<div class="feedback-list-container">
+  <div class="d-flex align-items-center mb-3">
+    <h4 class="fw-bold mb-0 me-2">Student Reviews</h4>
+    <span class="badge bg-secondary rounded-pill fs-6">{{ data?.course?.feedback?.length || 0 }}</span>
+  </div>
+
+  @for(feedback of data?.course?.feedback; track feedback._id){
+    <div class="card border-0 shadow-sm mb-3 feedback-card">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="d-flex align-items-center">
+            <img [src]="`https://ui-avatars.com/api/?name=${feedback.name}&background=random`" class="rounded-circle me-3" width="32" alt="avtar">
+            <h6 class="card-subtitle fw-bold text-dark mb-0">{{feedback.name}}</h6>
+          </div>
+        </div>
+        
+        <p class="card-text text-secondary mt-3 lh-base">
+          <i class="bi bi-quote text-light-emphasis fs-4 me-1 align-middle"></i>
+          {{feedback.message}}
+        </p>
+      </div>
+    </div>
+  } @empty {
+    <!-- Empty State if there are no reviews -->
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-chat-left-heart fs-1 text-light-emphasis"></i>
+      <p class="mt-2 mb-0">No reviews yet. Be the first to share your thoughts!</p>
+    </div>
+  }
+</div>
+}
 }

@@ -4,6 +4,9 @@ import { UserService } from '../../services/user-service';
 import { User } from '../../models/user';
 import { LowerCasePipe } from '@angular/common';
 import { Notification } from '../notification/notification';
+import { ToastrService } from 'ngx-toastr';
+import { LoadingService } from '../../services/loading-service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +18,8 @@ export class Sidebar {
 
   router = inject(Router);
   userService = inject(UserService);
+  toastService=inject(ToastrService);
+  loadingService=inject(LoadingService);
 
   navElements = input<string[]>();
   activeUser!:User;
@@ -32,8 +37,23 @@ export class Sidebar {
   }
 
   logout(){
-    localStorage.removeItem("eshikshaToken");
-    this.router.navigateByUrl("");
+    
+    this.loadingService.isLoading$.next(true);
+    this.userService.logout().pipe(
+      finalize(()=>this.loadingService.isLoading$.next(false))
+    ).subscribe({
+         next:(res)=>{
+          localStorage.removeItem("eshikshaToken");
+          this.router.navigateByUrl("");
+          this.toastService.warning(res.message);
+         },
+         error:(err)=>{
+          this.toastService.error("problem during logout")
+         }
+    }
+      
+    )
+    
   }
 
   openNotificaionBox(){

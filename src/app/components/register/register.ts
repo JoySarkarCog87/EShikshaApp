@@ -46,9 +46,6 @@ export class Register {
     const { name, email, role, password } = this.registerForm.value;
     if(name && email && role && password){
       this.userService.register(new User(name,email,role,password))
-      .pipe(
-        finalize(()=>this.loadingService.isLoading$.next(false))
-      )
       .subscribe({
         next:res=>{
           this.toasterService.success(res.message as string);

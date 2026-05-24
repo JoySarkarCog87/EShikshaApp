@@ -14,7 +14,7 @@ export class AdminPage {
   userService = inject(UserService);
 
 
-  navElements = ["Dashboard", "Manage Users", "Course Catalog", "Message", "Settings"];
+  navElements = ["Dashboard", "Manage Users", "Course Catalog", "Settings"];
 
   ngOnInit(){
     this.userService.activeUser$.subscribe(res=>{

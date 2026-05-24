@@ -1,0 +1,54 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <span class="badge bg-success-subtle text-success mb-2">Assignment</span>
+                        <h2 class="fw-bold">{{assignmentTitle}}</h2>
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-clock me-1"></i> Due: {{dueDate}} | Total Marks: {{totalMarks}}
+                        </p>
+                    </div>
+                    <button class="btn btn-outline-success btn-sm fw-bold" (click)="downloadInstructorPdf()" [disabled]="!fileId">
+                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download Assignment PDF
+                    </button>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold">Instructions:</h6>
+                    <ul>
+                        <li>Ensure you complete and submit your work on or before the due date.</li>
+                        <li>Upload your result as a PDF file.</li>
+                        <li>You may either drag and drop your PDF into the submission box or browse and select the file
+                            manually.</li>
+                        <li>Double-check that the file is correctly uploaded before finalizing your submission.</li>
+                    </ul>
+                    <p class="text-secondary small">
+                        Submit it on or before due date ASAP.
+                    </p>
+                </div>
+
+                <div class="border border-2 border-dashed rounded-4 p-5 text-center bg-light mb-4"
+                    (click)="fileInput.click()" style="cursor: pointer;">
+                    <i class="bi bi-cloud-arrow-up-fill text-success h1"></i>
+                    <p class="mb-1 fw-bold">
+                        {{ selectedFile ? selectedFile.name : 'Drag and drop your result PDF here' }}
+                    </p>
+                    <p class="text-muted small" *ngIf="!selectedFile">
+                        or <span class="text-success text-decoration-underline">browse files</span>
+                    </p>
+                    <input type="file" #fileInput class="d-none" (change)="onFileSelected($event)"
+                        accept="application/pdf">
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-success fw-bold py-2 rounded-pill" [disabled]="!selectedFile"
+                        (click)="submitResult()">
+                        Submit Assignment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

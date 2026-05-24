@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { CourseService } from '../../services/course-service';
 import { UserService } from '../../services/user-service';
-import { Course } from '../../models/course';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType } from 'chart.js';
+import { DashboardServices } from '../../services/dashboard-services';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-insdashboard',
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, RouterModule],
   templateUrl: './insdashboard.html',
   styleUrl: './insdashboard.css',
 })
@@ -15,29 +17,7 @@ export class Insdashboard {
 
   private courseService = inject(CourseService);
   private userService = inject(UserService);
-
- lovedCourses = signal([
-    { _id: '1', title: 'Mastering Node.js API', rating: 4.9, enrolled: 450, loveScore: 98 },
-    { _id: '2', title: 'Advanced CSS Animations', rating: 4.8, enrolled: 320, loveScore: 92 },
-    { _id: '3', title: 'Database Optimization', rating: 4.7, enrolled: 210, loveScore: 85 }
-  ]);
-
-  // Chart Configuration
-  public lineChartData: ChartConfiguration['data'] = {
-    datasets: [
-      {
-        data: [65, 59, 80, 81, 56, 55, 40],
-        label: 'New Students',
-        backgroundColor: 'rgba(13, 110, 253, 0.1)',
-        borderColor: '#0d6efd',
-        pointBackgroundColor: '#0d6efd',
-        pointBorderColor: '#fff',
-        fill: 'origin',
-        tension: 0.4 // Makes the line smooth
-      }
-    ],
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-  };
+  private dashboardService = inject(DashboardServices);
 
   public lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -46,9 +26,91 @@ export class Insdashboard {
       legend: { display: false }
     },
     scales: {
-      y: { display: false }, // Hide Y axis for a cleaner minimal look
+      y: { display: false },
       x: { grid: { display: false } }
     }
   };
+
+  dashboardData = signal<any>('');
+
+  ngOnInit(){
+    this.dashboardService.getInstructorDashboard().subscribe({
+      next:res=>{
+        this.dashboardData.set(res.result);
+        this.courseService.instructorCoursesList$.next(res.result?.courses?.map((c:any)=>({id:c._id, title:c.title, category:c.category})))
+      },
+      error:err=>{
+        console.log(err);
+      }
+    })
+  }
+
+
+  getTotalStudents():number{
+    if(this.dashboardData()?.students?.length===0)return 0;
+    return this.dashboardData()?.students?.map((c:any)=>c.totalStudents)?.reduce((a:number,b:number)=>a+b)??0;
+  }
+
+  getAverageRating():string{
+    if(this.dashboardData()?.courses?.length===0)return "0.0";
+    return (this.dashboardData()?.courses?.map((c:any)=>{
+      if(c.avarageRating?.$numberDecimal){
+        return parseInt(c.avarageRating?.$numberDecimal)
+      }
+      return 0;
+    })?.reduce((a:number,b:number)=>a+b)/this.dashboardData()?.courses?.length).toFixed(1)??0;
+  }
+
+
+  getTopThreeCourse(){
+    return this.dashboardData()?.courses?.slice(0,3);
+  }
+
+  getLineChartData():ChartConfiguration['data']{
+
+    const courses = this.dashboardData()?.courses;
+    const students = this.dashboardData()?.students;
+    const data = [];
+    const labels = [];
+
+    for(let i=0; i<5; i++){
+      data.push(students[i]?.totalStudents??0);
+      if(students[i]?.course){
+        const ind = courses.findIndex((c:any)=>c._id===students[i]?.course);
+        labels.push(courses[ind]?.title)
+      }else{
+        labels.push("No")
+      }
+    }
+
+    return {
+      datasets: [
+        {
+          data: data,
+          label: 'New Students',
+          backgroundColor: [
+            'rgba(255, 204, 86, 0.66)',
+            'rgba(75, 192, 192, 0.66)',
+            'rgba(54, 163, 235, 0.62)',
+            'rgba(153, 102, 255, 0.68)',
+            'rgba(201, 203, 207, 0.68)'
+          ],
+          borderColor: [
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          pointBackgroundColor: '#0d6efd',
+          pointBorderColor: '#fff',
+          fill: 'origin',
+          tension: 0.4 
+        }
+      ],
+      labels: labels
+    };
+  }
+
 
 }

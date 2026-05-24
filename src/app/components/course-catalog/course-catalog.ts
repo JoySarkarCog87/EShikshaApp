@@ -45,7 +45,6 @@ export class CourseCatalog {
   getCourses = (val?:string)=>{
     this.courseService.getAllCourses(val).subscribe(res=>{
       this.courseList.set(res.result);
-      this.courseService.catalogCourses$.next(res.result);
     })
   }
 

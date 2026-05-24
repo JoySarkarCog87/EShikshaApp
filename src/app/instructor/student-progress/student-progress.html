@@ -9,130 +9,114 @@
             <div class="dropdown-wrapper">
                 <label class="form-label small fw-bold text-uppercase text-muted">Filter by Course</label>
                 <!-- courses -->
-                <select class="form-select border-0 shadow-sm py-2 px-3">
-                    @for(course of courseNames(); track course.id){
-                        <option value={{course.id}}>{{course.title}}</option>
+                <select class="form-select border-0 shadow-sm py-2 px-3" (change)="onCourseChange($event)">
+                    <option value="" selected disabled>-- Choose one courses --</option>
+                    @for(course of instructorCourses(); track course.id){
+                        <option value={{course.id}}>{{course.title}} -- ({{course.category}})</option>
                     }
                 </select>
             </div>
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-primary-soft text-primary me-3">
-                        <i class="bi bi-people fs-4"></i>
-                    </div>
-                    <div>
-                        <h5 class="mb-0 fw-bold">124</h5>
-                        <small class="text-muted">Total Students</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-success-soft text-success me-3">
-                        <i class="bi bi-check2-circle fs-4"></i>
-                    </div>
-                    <div>
-                        <h5 class="mb-0 fw-bold">68%</h5>
-                        <small class="text-muted">Avg. Completion</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-warning-soft text-warning me-3">
-                        <i class="bi bi-star fs-4"></i>
-                    </div>
-                    <div>
-                        <h5 class="mb-0 fw-bold">82.4</h5>
-                        <small class="text-muted">Avg. Quiz Score</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex align-items-center">
-                    <div class="icon-box bg-danger-soft text-danger me-3">
-                        <i class="bi bi-clock-history fs-4"></i>
-                    </div>
-                    <div>
-                        <h5 class="mb-0 fw-bold">12</h5>
-                        <small class="text-muted">At Risk Students</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white py-3 border-0">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Detailed Performance</h5>
-                <button class="btn btn-light btn-sm border">
-                    <i class="bi bi-funnel me-1"></i> More Filters
-                </button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="table align-middle table-nowrap mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Student</th>
-                        <th>Course Status</th>
-                        <th>Modules Done</th>
-                        <th>Quiz Average</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="ps-4">
+    @if(studentsProgressData(); as data){
+        @if(data?.students?.length>0){
+            @if(data?.totalModules===0){
+                <h3 class="fw-bold text-dark mb-2 text-center">No Modules In This Course</h3>
+                <p class="text-secondary mb-4 small text-center">
+                    This course is currently empty. Get started by adding your first quiz or assignment.
+                </p>
+            }@else{
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
                             <div class="d-flex align-items-center">
-                                <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=random" class="rounded-circle me-3" width="32" alt="">
+                                <div class="icon-box bg-primary-soft text-primary me-3">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
                                 <div>
-                                    <h6 class="mb-0 fs-sm fw-bold">Alex Johnson</h6>
-                                    <small class="text-muted">alex.j@example.com</small>
+                                    <h5 class="mb-0 fw-bold">{{data?.students?.length}}</h5>
+                                    <small class="text-muted">Total Students</small>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <div class="progress mb-1" style="height: 6px; width: 150px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;"></div>
-                            </div>
-                            <small class="text-muted">75% Complete</small>
-                        </td>
-                        <td><span class="fw-medium">12/16</span></td>
-                        <td><span class="text-success fw-bold">94%</span></td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
                             <div class="d-flex align-items-center">
-                                <img src="https://ui-avatars.com/api/?name=Sarah+Lee&background=random" class="rounded-circle me-3" width="32" alt="">
+                                <div class="icon-box bg-success-soft text-success me-3">
+                                    <i class="bi bi-check2-circle fs-4"></i>
+                                </div>
                                 <div>
-                                    <h6 class="mb-0 fs-sm fw-bold">Sarah Lee</h6>
-                                    <small class="text-muted">s.lee@example.com</small>
+                                    <h5 class="mb-0 fw-bold">{{getAverageCourseComplitionRate()}}%</h5>
+                                    <small class="text-muted">Avg. Completion</small>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <div class="progress mb-1" style="height: 6px; width: 150px;">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-box bg-danger-soft text-danger me-3">
+                                    <i class="bi bi-clock-history fs-4"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 fw-bold">{{getRiskStudentCount()}}</h5>
+                                    <small class="text-muted">At Risk Students</small>
+                                </div>
                             </div>
-                            <small class="text-muted">30% Complete</small>
-                        </td>
-                        <td><span class="fw-medium">4/16</span></td>
-                        <td><span class="text-dark fw-bold">72%</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3 border-0">
+                        <h5 class="mb-0 fw-bold">Detailed Performance</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Student</th>
+                                    <th>Course Status</th>
+                                    <th>Modules Done</th>
+                                    <!-- <th>Quiz Average</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(sdata of data?.students; track $index){
+                                    <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <img [src]="`https://ui-avatars.com/api/?name=${sdata?.student?.name}&background=random`" class="rounded-circle me-3" width="32" alt="">
+                                            <div>
+                                                <h6 class="mb-0 fs-sm fw-bold">{{sdata?.student?.name}}</h6>
+                                                <small class="text-muted">{{sdata?.student?.email}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="progress mb-1" style="height: 6px; width: 150px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" [ngStyle]="{'width':`${(sdata?.completedModule/data?.totalModules)*100}%`}"></div>
+                                        </div>
+                                        <small class="text-muted">{{((sdata?.completedModule/data?.totalModules)*100).toFixed(2)}}% Complete</small>
+                                    </td>
+                                    <td><span class="fw-medium">{{sdata?.completedModule}}/{{data?.totalModules}}</span></td>
+                                    <!-- <td><span class="text-success fw-bold">94%</span></td> -->
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }@else{
+            <div class="mt-5 p-2">
+                <h3 class="fw-bold text-dark mb-2 text-center">No Students Enrolled Yet</h3>
+                <p class="text-secondary mb-4 small text-center">
+                    It looks like nobody has signed up for this course just yet. Once students enroll, their details will appear right here.
+                </p>
+            </div>
+        }
+    }
 </div>

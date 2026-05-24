@@ -3,6 +3,8 @@ export class Assignments{
         public title:string,
         public dueDate:Date,
         public totalMarks:number,
-        public file:string
+        public courseId:number,
+        public file:string,
+        public _id:string
     ){}
 }

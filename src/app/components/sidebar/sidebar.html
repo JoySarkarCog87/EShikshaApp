@@ -3,10 +3,10 @@
   <aside class="d-none d-lg-block bg-body-tertiary border-end" style="width: 250px;min-width: 250px;">
     <div class="p-3 sticky-top">
       <div class="navbar-brand d-flex align-items-center mb-4">
-        @if(activeUser.role==='ADMIN'){
+        @if(activeUser?.role==='ADMIN'){
         <img src="https://cdn-icons-png.flaticon.com/512/2206/2206368.png"
           style="max-height: 40px; border-radius:20px; background: #f0f2f5" class="me-2" alt="Admin Icon" />
-        }@else if(activeUser.role==='INSTRUCTOR'){
+        }@else if(activeUser?.role==='INSTRUCTOR'){
         <img src="https://th.bing.com/th/id/OIP.e3eb_GMDTeJh21FDBJ6lwQHaHa?w=193&h=193&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
           style="max-height: 40px; border-radius:20px" class="me-2" />
         }@else{
@@ -63,7 +63,7 @@
           <!--  -->
           <div class="user-header-wrap w-100 d-flex justify-content-end align-items-center">
             <div class="user-profile-pill d-flex align-items-center gap-3">
-              <div class="notification-container">
+              <!-- <div class="notification-container">
                 <button class="bell-wrapper border-0" (click)="openNotificaionBox()">
                   <i class="bi bi-bell-fill"></i>
                   <span class="notification-badge">3</span>
@@ -71,7 +71,7 @@
                 @if(showNotificaitonBox()){
                   <app-notification></app-notification>
                 }
-              </div>
+              </div> -->
               <div class="text-end d-none d-sm-block">
                 <p class="user-name">{{activeUser.name}}</p>
                 <span class="badge rounded-pill role-badge text-capitalize shadow-sm">

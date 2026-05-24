@@ -5,6 +5,7 @@ import { CourseService } from '../../services/course-service';
 import { UserService } from '../../services/user-service';
 import { ToastrService } from 'ngx-toastr';
 import { required } from '@angular/forms/signals';
+import { isArray } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-manage-course',
@@ -21,7 +22,7 @@ export class ManageCourse {
 
   isEditMode = signal(false);
   oldCourseName = ""; // Used to find the course in the list if the name is changed
-  
+  courseId="";
 
   courseForm = this.fb.group({
     title: ['', Validators.required],
@@ -50,15 +51,45 @@ export class ManageCourse {
       }else{
         this.courseList.set(res);
       }
-    })
-    
+    })  
   }
-
+   
   onSubmit() {
     console.log(this.courseForm.value);
     const {title,category,description ,imageUrl}=this.courseForm.value;
-    if(title && category && description && imageUrl){
 
+    const updatedData={
+      title:title??"",
+      category:category??"",
+      description:description??"",
+      imageUrl:imageUrl??""
+    }
+    
+    if(this.isEditMode()){
+      this.courseService.updateCourse(this.courseId, updatedData ).subscribe({
+         next:res=>{
+          console.log("this is result:");
+          console.log(res.result);
+          this.courseList.update(cArr=>cArr.map(c=>{
+          if(c._id==res.result._id) return res.result;  
+          return c; 
+          }))
+
+          this.toastService.success(res.message);
+          this.resetForm();
+        },
+        error:err=>{
+          console.log(err);
+          if(isArray(err.error.message)){
+            err.error.message.forEach((e:any)=>this.toastService.error(e.msg));
+          }else{
+            this.toastService.error(err.error.message??"Internal Server Error");
+          }
+        }
+      })
+    }
+    else{
+    if(title && category && description && imageUrl){  
       this.courseService.createCourse(new Course(title,category,description,imageUrl)).subscribe({
         next:res=>{
           const courses=this.courseList();
@@ -68,26 +99,43 @@ export class ManageCourse {
           this.resetForm();
         },
         error:err=>{
-          this.toastService.error(err.error.message??"Internal Server Error");
+          console.log(err);
+          if(isArray(err.error.message)){
+            err.error.message.forEach((e:any)=>this.toastService.error(e.msg));
+          }else{
+            this.toastService.error(err.error.message??"Internal Server Error");
+          }
         }
       })
     }
   }
+  }
+ 
+  editCourse(course: any) {
+  this.isEditMode.set(true);
+    this.oldCourseName = course.title;
+    this.courseForm.patchValue({
+      title: course.title,
+      category: course.category,
+      description: course.description,
+      imageUrl:course.imageUrl
+    });
+    console.log(course);
+    console.log(course._id);
 
-   editCourse(course: any) {
-  //   this.isEditMode.set(true);
-  //   this.oldCourseName = course.cName;
-  //   this.courseForm.patchValue({
-  //     title: course.cName,
-  //     category: course.cCategory,
-  //     description: course.cDescription
-  //   });
+    this.courseId=course._id;
   }
    
-  deleteCourse(name: string) {
-    // this.removeCourse(name);
-    // if (this.oldCourseName === name) this.resetForm();
-    console.log(name);
+  deleteCourse(id: string) {
+    this.courseService.deleteCourse(id).subscribe({
+      next:res=>{
+        this.courseList.update(cArr=>cArr.filter(c=>c._id!==id))
+        this.toastService.success(res.message);
+      },
+      error:err=>{
+        this.toastService.error(err.error.message);
+      }
+    })
   }
   
   resetForm() {

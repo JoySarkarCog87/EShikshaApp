@@ -1,13 +1,13 @@
 <div class="container-fluid p-4">
     <h2 class="h4 mb-4 fw-bold">Account Settings</h2>
-    <div class="card border-0 shadow-sm">
+    <form class="card border-0 shadow-sm" [formGroup]="settingsForm">
         <div class="card-body p-4 p-md-5">
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label small fw-bold text-uppercase text-muted">Full Name</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="bi bi-person text-primary"></i></span>
-                            <input type="text" class="form-control" [(ngModel)]="updatedData.name">
+                            <input type="text" class="form-control" formControlName="name">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -21,34 +21,47 @@
                         <label class="form-label small fw-bold text-uppercase text-muted">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="bi bi-envelope text-primary"></i></span>
-                            <input type="email" class="form-control" [ngModel]="updatedData.email">
+                            <input type="email" class="form-control" formControlName="email">
                         </div>
                     </div>
-
                     <div class="col-12 pt-3">
                         <hr class="text-muted opacity-25">
                         <h5 class="mt-4 mb-3">Security & Password</h5>
                     </div>
-
                     <div class="col-md-6">
                         <label class="form-label small fw-bold text-uppercase text-muted">New Password</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
-                            <input type="password" [(ngModel)]="updatedData.password" class="form-control" placeholder="Leave blank to keep current">
+                            <input type="password" formControlName="password" class="form-control" placeholder="Leave blank to keep current">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold text-uppercase text-muted">Confirm Password</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="bi bi-lock-fill"></i></span>
-                            <input type="password" [(ngModel)]="updatedData.confirmPassword" class="form-control" placeholder="Confirm new password">
+                            <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm new password">
                         </div>
                     </div>
+                    @if(password?.touched && password?.invalid && !password?.hasError('required')){
+                        @for(error of password?.errors | keyvalue; track $index){
+                            <div class="ps-2 mt-1">
+                                <small class="text-danger fw-bold animate__animated animate__fadeIn">
+                                    <i class="bi bi-exclamation-circle-fill me-1"></i>{{password?.errors?.[error.key]}}
+                                </small>
+                            </div>
+                        }
+                    }
+                    @if (!password?.invalid && confirmPassword?.touched && confirmPassword?.hasError('mismatch')) {
+                        <div class="text-center">
+                            <small class="text-danger fw-bold animate__animated animate__fadeIn">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i> Passwords do not match
+                            </small>
+                        </div>
+                    }
                 </div>
-
                 <div class="d-flex justify-content-end gap-3 mt-5">
                     <button type="submit" class="btn btn-primary px-4 fw-bold" (click)="updateProfile()">Update Profile</button>
                 </div>
         </div>
-    </div>
+    </form>
 </div>

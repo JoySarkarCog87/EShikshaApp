@@ -2,119 +2,54 @@
     <div class="row mb-4">
         <div class="col-md-8">
             <h3 class="fw-bold">My Enrolled Courses</h3>
-            <p class="text-muted">You have 3 active courses in your learning path.</p>
+            <p class="text-muted">You have {{courseList()?.length||0}} active courses in your learning path.</p>
         </div>
         <div class="col-md-4 text-md-end d-flex align-items-center justify-content-md-end">
             <div class="btn-group shadow-sm">
-                <button class="btn btn-white border active">All</button>
-                <button class="btn btn-white border">In Progress</button>
-                <button class="btn btn-white border">Completed</button>
+                <button class="btn btn-white border" [ngClass]="activeTab==='all'?'active':''" (click)="getFilturedCourse('all')">All</button>
+                <button class="btn btn-white border" [ngClass]="activeTab==='inprogress'?'active':''" (click)="getFilturedCourse('inprogress')">In Progress</button>
+                <button class="btn btn-white border" [ngClass]="activeTab==='complete'?'active':''" (click)="getFilturedCourse('complete')">Completed</button>
             </div>
         </div>
     </div>
 
     <div class="row g-4">
-        <div class="col-xl-4 col-md-6">
-            <div class="course-card shadow-sm h-100 bg-white">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=800&q=80" class="course-img" alt="Python Course">
-                    <span class="badge bg-primary course-tag">Best Seller</span>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <small class="text-uppercase fw-bold text-primary">Development</small>
-                        <span class="text-muted small"><i class="bi bi-clock me-1"></i> 12h 30m</span>
+        @for(encourse of courseList(); track $index){
+            <div class="col-xl-4 col-md-6">
+                <div class="course-card shadow-sm h-100 bg-white">
+                    <div class="position-relative">
+                        <img [src]="encourse.course.imageUrl" class="course-img" [alt]="encourse.course.title">
                     </div>
-                    <h5 class="fw-bold mb-3">Advanced Python for Data Science</h5>
-                    
-                    <div class="progress-section mb-4">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small fw-medium">Course Progress</span>
-                            <span class="small fw-bold">75%</span>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <small class="text-uppercase fw-bold text-primary">{{encourse.course.category}}</small>
                         </div>
-                        <div class="progress" style="height: 6px;">
-                            <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+                        <h5 class="fw-bold mb-3">{{encourse.course.title}}</h5>
+                        
+                        <div class="progress-section mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small fw-medium">Course Progress</span>
+                                <span class="small fw-bold">{{encourse.completePercentage}}%</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" role="progressbar" [ngStyle]="{'width': `${encourse.completePercentage}%`}"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                        <div class="instructor-info d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Dr+Jane&background=random" class="rounded-circle me-2" width="24" alt="">
-                            <small class="text-muted">Dr. Jane Smith</small>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                            <div class="instructor-info d-flex align-items-center">
+                                <img [src]="getNameAvterUrl(encourse.course.instructor.name)" class="rounded-circle me-2" width="24" alt="">
+                                <small class="text-muted">{{encourse.course.instructor.name}}</small>
+                            </div>
+                            @if(encourse.completePercentage!==100){
+                                <a class="btn btn-primary px-4" [routerLink]="`coursedetails/${encourse.course._id}`">Resume</a>
+                            }@else{
+                                <a class="btn btn-primary px-4" routerLink="result"><i class="bi bi-award me-1"></i>Certificate</a>
+                            }
                         </div>
-                        <a class="btn btn-primary px-4" routerLink="coursedetails/6a02f67b2e5e3831212c0b34">Resume</a>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6">
-            <div class="course-card shadow-sm h-100 bg-white">
-                <div class="position-relative">
-                    <img src="https://plus.unsplash.com/premium_photo-1683147638125-fd31a506a429?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="course-img" alt="UI/UX Course">
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <small class="text-uppercase fw-bold text-info">Design</small>
-                        <span class="text-muted small"><i class="bi bi-clock me-1"></i> 8h 15m</span>
-                    </div>
-                    <h5 class="fw-bold mb-3">UI/UX Design Fundamentals</h5>
-                    
-                    <div class="progress-section mb-4">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small fw-medium">Course Progress</span>
-                            <span class="small fw-bold">30%</span>
-                        </div>
-                        <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 30%"></div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                        <div class="instructor-info d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Mark+Lee&background=random" class="rounded-circle me-2" width="24" alt="">
-                            <small class="text-muted">Mark Lee</small>
-                        </div>
-                        <button class="btn btn-primary px-4">Resume</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6">
-            <div class="course-card shadow-sm h-100 bg-white">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" class="course-img" alt="Web Dev Course">
-                    <div class="completed-overlay">
-                        <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <small class="text-uppercase fw-bold text-success">Web Dev</small>
-                        <span class="text-muted small">Completed</span>
-                    </div>
-                    <h5 class="fw-bold mb-3">Full Stack Web Development</h5>
-                    
-                    <div class="progress-section mb-4">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small fw-medium">Course Progress</span>
-                            <span class="small fw-bold">100%</span>
-                        </div>
-                        <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between pt-3 border-top">
-                        <div class="instructor-info d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Sarah+S&background=random" class="rounded-circle me-2" width="24" alt="">
-                            <small class="text-muted">Sarah Stevens</small>
-                        </div>
-                        <a class="btn btn-primary px-4" routerLink="result"><i class="bi bi-award me-1"></i>Certificate</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>

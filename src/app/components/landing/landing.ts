@@ -37,13 +37,13 @@ export class Landing {
     ).subscribe(res=>{
       this.loadingService.isLoading$.next(true);
       console.log(res);
-      this.courseServices.getAllCourses(res??'').subscribe(response=>{
+        this.courseServices.getAllCourses(res??'').subscribe(response=>{
         this.courses.set(response.result);
         this.loadingService.isLoading$.next(false);
       })
     })
   }
- 
+  
   // Partnars came form api
   partnars = ["Google", "Amazon", "Flipkart"];
 

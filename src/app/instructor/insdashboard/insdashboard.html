@@ -1,107 +1,106 @@
-<div class="container-fluid p-4 bg-light min-vh-100">
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h3 class="fw-bold text-dark mb-1">Instructor Dashboard</h3>
-      <p class="text-muted small">Your performance and student feedback overview.</p>
-    </div>
-    <button class="btn btn-primary rounded-pill px-4 shadow-sm">
-      <i class="bi bi-plus-lg me-2"></i>Create Course
-    </button>
-  </div>
-
-  <!-- Top Level Stats -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-4">
-      <div class="card border-0 shadow-sm p-3">
-        <div class="d-flex align-items-center gap-3">
-          <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3">
-            <i class="bi bi-people-fill fs-4"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">My Students</div>
-            <div class="h4 fw-bold mb-0">1,248</div>
-          </div>
-        </div>
+@if(dashboardData(); as data){
+  <div class="container-fluid p-4 bg-light min-vh-100">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="fw-bold text-dark mb-1">Instructor Dashboard</h3>
+        <p class="text-muted small">Your performance and student feedback overview.</p>
       </div>
+      <a class="btn btn-primary rounded-pill px-4 shadow-sm" routerLink="../managecourse">
+        <i class="bi bi-plus-lg me-2"></i>Create Course
+      </a>
     </div>
-    <div class="col-md-4">
-      <div class="card border-0 shadow-sm p-3">
-        <div class="d-flex align-items-center gap-3">
-          <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3">
-            <i class="bi bi-heart-fill fs-4"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">Total Likes</div>
-            <div class="h4 fw-bold mb-0">856</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card border-0 shadow-sm p-3">
-        <div class="d-flex align-items-center gap-3">
-          <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-3">
-            <i class="bi bi-star-fill fs-4"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-medium">Avg. Rating</div>
-            <div class="h4 fw-bold mb-0">4.9</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row g-4">
-    <!-- Enrollment Trend Chart -->
-    <div class="col-lg-7">
-      <div class="card border-0 shadow-sm p-4 h-100">
-        <h6 class="fw-bold mb-4">Student Growth Trend</h6>
-        <div style="display: block; height: 320px;">
-          <canvas baseChart
-            [data]="lineChartData"
-            [options]="lineChartOptions"
-            [type]="'line'">
-          </canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Most Loved Courses -->
-    <div class="col-lg-5">
-      <div class="card border-0 shadow-sm p-4 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h6 class="fw-bold mb-0">Most Loved Courses</h6>
-          <i class="bi bi-trophy text-warning"></i>
-        </div>
-
-        <div class="d-flex flex-column gap-3">
-          @for (course of lovedCourses(); track course._id) {
-            <div class="p-3 border rounded-3 bg-white hover-shadow transition">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <div class="text-truncate pe-2">
-                  <span class="fw-bold d-block">{{ course.title }}</span>
-                  <span class="text-muted smaller" style="font-size: 0.75rem;">{{ course.enrolled }} Enrolled</span>
-                </div>
-                <span class="badge bg-warning text-dark d-flex align-items-center gap-1">
-                  {{ course.rating }} <i class="bi bi-star-fill" style="font-size: 0.6rem;"></i>
-                </span>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <div class="flex-grow-1">
-                    <div class="progress" style="height: 4px;">
-                        <div class="progress-bar bg-danger" [style.width.%]="course.loveScore"></div>
-                    </div>
-                </div>
-                <span class="smaller text-danger fw-bold" style="font-size: 0.75rem;">
-                    <i class="bi bi-heart-fill me-1"></i>{{ course.loveScore }}%
-                </span>
-              </div>
+  
+    <!-- Top Level Stats -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3">
+              <i class="bi bi-people-fill fs-4"></i>
             </div>
-          }
+            <div>
+              <div class="text-muted small fw-medium">My Students</div>
+              <div class="h4 fw-bold mb-0">{{getTotalStudents()}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3">
+              <i class="bi bi-collection-fill"></i>
+            </div>
+            <div>
+              <div class="text-muted small fw-medium">Total Courses</div>
+              <div class="h4 fw-bold mb-0">{{data?.courses?.length}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-3">
+              <i class="bi bi-star-fill fs-4"></i>
+            </div>
+            <div>
+              <div class="text-muted small fw-medium">Avg. Rating</div>
+              <div class="h4 fw-bold mb-0">{{getAverageRating()}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row g-4">
+      <!-- Enrollment Trend Chart -->
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4 h-100">
+          <h6 class="fw-bold mb-4">Student Growth Trend</h6>
+          <div style="display: block; height: 320px;">
+            <canvas baseChart
+              [data]="getLineChartData()"
+              [options]="lineChartOptions"
+              [type]="'bar'">
+            </canvas>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Most Loved Courses -->
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm p-4 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h6 class="fw-bold mb-0">Most Loved Courses</h6>
+            <i class="bi bi-trophy text-warning"></i>
+          </div>
+  
+          <div class="d-flex flex-column gap-3">
+            @for (course of getTopThreeCourse(); track course._id) {
+              <div class="p-3 border rounded-3 bg-white hover-shadow transition">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div class="text-truncate pe-2">
+                    <span class="fw-bold d-block">{{ course?.title }}</span>
+                    <span class="text-muted smaller" style="font-size: 0.75rem;">{{ course?.avarageRating?.$numberDecimal }} Rating</span>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="flex-grow-1">
+                      <div class="progress" style="height: 4px;">
+                          <div class="progress-bar bg-danger" [style.width.%]="((course?.avarageRating?.$numberDecimal??0)/5)*100"></div>
+                      </div>
+                  </div>
+                  <span class="smaller text-danger fw-bold" style="font-size: 0.75rem;">
+                      <i class="bi bi-heart-fill me-1"></i>{{ (((course?.avarageRating?.$numberDecimal??0)/5)*100).toFixed(2) }}%
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+}

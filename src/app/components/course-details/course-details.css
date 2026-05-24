@@ -47,3 +47,31 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
+.cursor-pointer {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cursor-pointer:hover {
+  transform: scale(1.15);
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  font-size: 1.1rem;
+}
+
+.feedback-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Custom background tint if Bootstrap 5.3 colors aren't fully configured */
+.bg-primary-subtle {
+  background-color: #e7f1ff !important;
+}

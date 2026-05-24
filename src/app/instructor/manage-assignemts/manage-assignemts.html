@@ -1,87 +1,175 @@
 <div class="container mt-4">
-  <div class="card border-success shadow-lg" style="border-radius: 15px;">
+  <div class="card lg" style="border-radius: 15px;">
     <div class="card-header bg-success text-white fw-bold py-3">
       Create New Assessment
     </div>
     <div class="card-body p-4">
+
       <form [formGroup]="assignmentForm" (ngSubmit)="onPublish()">
 
         <div class="mb-3">
-          <label class="form-label fw-semibold"> Title</label>
+          <label class="form-label fw-bold text-success">1. Select Course</label>
+          <select formControlName="courseId" class="form-select border-success shadow-sm">
+            <option value="" disabled>-- Choose one of your launched courses --</option>
+
+            @for(course of instructorCourses(); track course.id){
+            <option [value]="course.id">
+              {{ course.title }} -- ({{course.category}})
+            </option>
+            }
+
+          </select>
+
+          @if(assignmentForm.get('courseId')?.invalid && assignmentForm.get('courseId')?.touched){
+          <div>
+            <small class="text-danger">Please select a course first.</small>
+          </div>
+          }
+        </div>
+
+
+        <hr class="my-4">
+
+        @if(assignmentForm.get('courseId')?.value){
+        <label class="form-label fw-bold text-success">2. Assessment Details</label>
+
+        <div class="mb-3 mt-2">
+          <label class="form-label fw-semibold">Title</label>
           <input type="text" formControlName="title" class="form-control border-success-subtle"
             placeholder="Enter Assignment Title...">
-          <div *ngIf="assignmentForm.get('title')?.invalid && assignmentForm.get('title')?.touched">
-            <small class="text-danger">Title is required (min 5 chars).</small>
-          </div>
+
+          @if(title?.touched && title?.hasError('minlength')){
+          <p class="text text-danger">Title should be of minimum 5 characters</p>
+          }
+
+
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">Due Date</label>
-            <input type="date" formControlName="dueDate" [min]="getCurrentDate()" class="form-control border-success-subtle">
+            <input type="date" formControlName="dueDate" [min]="getCurrentDate()"
+              class="form-control border-success-subtle">
           </div>
+
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">Total Marks</label>
             <input type="number" formControlName="totalMarks" class="form-control border-success-subtle"
-              placeholder="e.g. 100">
+              placeholder="e.g 100">
           </div>
         </div>
+
         <div class="mb-4">
-          <label class="form-label fw-semibold">Upload Questions (PDF)</label>
-          <div class="input-group">
-            <input type="file" class="form-control border-success-subtle" (change)="onFileSelected($event)"
-              accept="application/pdf">
-            <label class="input-group-text bg-light"><i class="bi bi-file-earmark-pdf text-danger"></i></label>
-          </div>
-          <small class="text-muted">Please upload the assessment questions in PDF format.</small>
+          <label class="form-label fw-semibold">Upload Questions(PDF)</label>
+          <input type="file" class="form-control border-success-subtle" (change)="onFileSelected($event)"
+            accept="application/pdf">
         </div>
 
         <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm" [disabled]="assignmentForm.invalid">
-          Publish to Students
+          {{ isEditMode ? 'Update Assessment' : 'Publish to Students' }}
         </button>
+        }
+
       </form>
+
     </div>
   </div>
 </div>
 
+@if(assignmentForm.get('courseId')?.value){
+<div class="container mt-5">
+  <div class="row">
+    <div class="container mt-5 col-md-6">
+      <h4 class="text-muted mb-4">Published Assessments For : {{getCourseName(assignmentForm.get('courseId')?.value)}}
+      </h4>
 
-<div class="container mt-4">
-  <div class="col-md-7">
-    </div>
+      @if(publishedAssignments().length === 0){
+      <div class="text-center py-4 border rounded bg-light">
+        <p class="text-muted mb-0">No assignments published yet.</p>
+      </div>
+      }
 
-  <div class="col-md-5">
-    <h4 class="text-muted mb-4">Published Assessments</h4>
-    
-    <div *ngIf="publishedAssignments.length === 0" class="text-center py-5 border rounded bg-light">
-      <p class="text-muted mb-0">No assignments published yet.</p>
-    </div>
-
-    <div *ngFor="let item of publishedAssignments" class="card mb-3 border-success-subtle shadow-sm">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <div>
-            <h6 class="mb-0 fw-bold text-success">{{item.title}}</h6>
-            <small class="text-muted">
-              <i class="bi bi-calendar-event"></i> Due: {{item.dueDate | date:'mediumDate'}}
-            </small>
+      @for(item of publishedAssignments();track $index){
+      <div class="card mb-3 border-success-subtle shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 fw-bold text-success">
+              {{item.title}}
+            </h6>
+            <span class="badge bg-primary-subtle rounded-pill">
+              {{item.totalMarks}} Marks
+            </span>
           </div>
-          <span class="badge bg-success-subtle text-success">{{item.totalMarks}} Marks</span>
-        </div>
 
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-outline-secondary flex-grow-1" (click)="onDownload(item)" title="Download PDF">
-            <i class="bi bi-download"></i> Download
-          </button>
-          
-          <button class="btn btn-sm btn-outline-primary" (click)="onEdit(item)" title="Edit">
-            <i class="bi bi-pencil-square">Edit</i>
-          </button>
-          
-          <button class="btn btn-sm btn-outline-danger" (click)="onDelete(item.id)" title="Delete">
-            <i class="bi bi-trash">Delete</i>
-          </button>
+          <div class="d-flex flex-column text-muted small">
+            <span>
+              <i class="bi bi-calendar-event me-1"></i>
+              Due: {{item.dueDate | date:'mediumDate'}}
+            </span>
+          </div>
+
+
+          <hr class="my-3 opacity-25">
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-secondary flex-grow-1" (click)="onDownload(item)"
+              [disabled]="!item.file">
+              <i class="bi bi-download"></i> Download
+            </button>
+            <button class="btn btn-sm btn-outline-primary" (click)="onEdit(item)"><i
+                class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-sm btn-outline-danger" (click)="onDelete(item?._id)"><i
+                class="bi bi-trash"></i></button>
+            <button class="btn btn-success " (click)="viewResponse(item)">View Responses</button>
+          </div>
         </div>
       </div>
+      }
+    </div>
+
+
+    <div class="container mt-5 col-md-6">
+      <h4 class="text-muted mb-4 text-center">All Submitted Assessments</h4>
+      @if(viewResponses){
+      <div class="container mt-5">
+        @for (item of AssignmentResponses(); track item._id || $index) {
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-success mb-0">{{ item?.student?.name }}</span>
+              <small class="text-muted">
+                <i class="bi bi-calendar-event me-1"></i> email: {{item?.student?.email}}
+              </small>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="input-group w-50 me-3">
+                <input type="number" class="form-control" placeholder="Give Marks" [max]="maximumMarks()" #givenMarks>
+                <button class="btn btn-success" type="button" (click)="onSetMarks(item, +givenMarks.value)">
+                  Set
+                </button>
+              </div>
+
+              <button class="btn btn-outline-secondary me-2 md" (click)="downloadStudentDocument(item)"
+                [disabled]="!item.file">
+                <i class="bi bi-download me-1"></i> Download
+              </button>
+
+              <!-- <button class="btn btn-outline-danger" (click)="onDeleteResponse(item._id)">
+                  <i class="bi bi-trash me-1"></i> Delete
+                </button> -->
+            </div>
+
+          </div>
+        </div>
+        } @empty {
+        <div class="text-center text-muted p-4">
+          <p>No submitted assessments found.</p>
+        </div>
+        }
+
+      </div>
+      }
     </div>
   </div>
 </div>
+}

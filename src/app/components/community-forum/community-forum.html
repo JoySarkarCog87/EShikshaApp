@@ -1,0 +1,56 @@
+<div class="forum-wrapper fade-in p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-white fw-bold">Community Forum</h2>
+    <button class="btn btn-neon" (click)="toggleForm()">
+      {{ isFormOpen ? 'Cancel' : '+ New Post' }}
+    </button>
+  </div>
+
+  <div *ngIf="isFormOpen" class="post-form-card p-4 mb-4 rounded-4 shadow">
+    <h5 class="text-white mb-3">Start a Discussion</h5>
+    <input type="text" class="form-control mb-3 bg-dark text-white border-secondary" 
+           [(ngModel)]="newPostTitle" placeholder="Topic Title">
+    <textarea class="form-control mb-3 bg-dark text-white border-secondary" 
+              [(ngModel)]="newPostContent" rows="3" placeholder="What's on your mind?"></textarea>
+    <button class="btn btn-primary w-100" (click)="submitPost()">Post to Community</button>
+  </div>
+
+  <div class="thread-list">
+    <div *ngFor="let post of posts()" class="forum-card p-4 mb-3 rounded-4">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <span class="badge mb-2" 
+                [ngClass]="{'bg-info': post.category === 'Technical', 'bg-secondary': post.category === 'General', 'bg-primary': post.category === 'Question'}">
+            {{post.category}}
+          </span>
+          <h5 class="text-white fw-bold mb-1">{{post.title}}</h5>
+          <p class="text-white opacity-75">{{post.description}}</p>
+          <p class="text-white-50 small mb-0">By {{ post.users||post.author}} • {{post.date}}</p>
+        </div>
+        <div class="reply-count text-center p-2 rounded-3" style="color: #ffffff !important">
+          <span class="d-block text-white fw-bold">{{post.replies?.length || 0}}</span>
+          <small class="text-muted" style="color: #64ffda !important">Replies</small>
+        </div>
+      </div>
+
+      <hr class="border-secondary opacity-25">
+
+      <div class="replies-section ms-4 mb-3" *ngIf="post.replies?.length">
+        <div *ngFor="let rep of post.replies" class="reply-box text-light py-1">
+  <strong class="text-info">{{ rep.user }}</strong> : <span class="text-white-50">{{ rep.reply }}</span>
+</div>
+      </div>
+
+      <div class="input-group input-group-sm mt-3">
+        <input type="text" #replyBox 
+               class="form-control bg-dark text-white border-secondary shadow-none" 
+               placeholder="Write a public reply..."
+               (keyup.enter)="postReply(post.id, replyBox.value); replyBox.value=''">
+        <button class="btn btn-primary" 
+                (click)="postReply(post._id, replyBox.value); replyBox.value=''">
+          Reply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

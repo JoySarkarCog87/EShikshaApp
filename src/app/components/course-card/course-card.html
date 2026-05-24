@@ -30,8 +30,8 @@
         <!-- Rating -->
         <div class="small fw-semibold text-dark">
           <i class="bi bi-star-fill text-warning me-1"></i>
-          {{course()?.rating?.average}} 
-          <span class="text-muted fw-normal">({{course()?.enrolments}})</span>
+          {{course()?.rating?.average?.$numberDecimal || course()?.rating?.average || 0}} 
+          <span class="text-muted fw-normal">({{course()?.enrolled || 0}})</span>
         </div>
       </div>
 
