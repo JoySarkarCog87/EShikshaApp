@@ -16,6 +16,7 @@ import { isArray } from 'chart.js/helpers';
   imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
+  providers: [RegisterFormValidator]
 })
 export class Register {
   // Custom Services

@@ -1,12 +1,12 @@
 <div class="container py-5">
-  <!-- Search Section -->
+ 
   <div class="row mb-5 align-items-center">
     <div class="col-md-6">
       <h2 class="fw-bold text-dark mb-1">Explore All Courses</h2>
       <p class="text-muted">Pick a course and start your learning journey today.</p>
     </div>
     
-    <!-- Real-time Search Input -->
+    
     <div class="col-md-6">
       <div class="input-group shadow-sm">
         <span class="input-group-text bg-white border-end-0">
@@ -23,13 +23,12 @@
   </div>
             
   <div class="row g-4">
-    <!-- Updated to loop through filteredCourses() -->
+    
    @for (course of courseList(); track course._id) {
       <div class="col-md-6 col-lg-4">
         <app-course-card [course]="course"></app-course-card>
       </div>
     }@empty {
-      <!-- Shown when no courses match the search -->
       <div class="col-12 text-center py-5">
         <div class="bg-light p-5 rounded-4 border border-dashed">
           <i class="bi bi-search display-1 text-muted"></i>

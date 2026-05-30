@@ -3,7 +3,7 @@ import { User } from '../../models/user';
 import { UserService } from '../../services/user-service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { combineLatest, debounceTime, distinctUntilChanged, finalize, startWith, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { LoadingService } from '../../services/loading-service';
@@ -23,11 +23,14 @@ export class Users {
 
   users = signal<{users:User[], totalUsers:number}>({users:[], totalUsers:0});
   selectedRole!:string;
+
   searchText = new FormControl('');
   setEditUser = signal<string>('');
   updatedRole = new FormControl('');
   currentPage = signal<number>(1);
   openInputRow = signal<boolean>(false);
+
+
   instructorData = this.formBuilder.group({
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")]]
@@ -48,6 +51,10 @@ export class Users {
         )
       })
     )
+
+    get email(){
+    return this.instructorData.get('email');
+    }
 
   ngOnInit(){
     this.getUser$
@@ -184,7 +191,5 @@ export class Users {
     }
   }
 
-  get email(){
-    return this.instructorData.get('email');
-  }
+  
 }

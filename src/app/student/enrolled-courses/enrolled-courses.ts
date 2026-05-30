@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CourseService } from '../../services/course-service';

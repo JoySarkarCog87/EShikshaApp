@@ -3,13 +3,14 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { LoadingService } from '../../services/loading-service';
 import { DashboardServices } from '../../services/dashboard-services';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
+
 @Component({
   selector: 'app-admindashboard',
-  imports: [BaseChartDirective, DatePipe, CommonModule],
+  imports: [BaseChartDirective, CommonModule],
   templateUrl: './admindashboard.html',
   styleUrl: './admindashboard.css',
 })
@@ -37,7 +38,7 @@ export class Admindashboard {
       backgroundColor:'rgba(255,99,132,0.2)'
     }
   ]
-  
+
   monthLabels:number[]=[];
   showChart = signal<boolean>(false);
 

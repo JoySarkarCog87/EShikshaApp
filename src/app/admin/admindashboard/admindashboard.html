@@ -84,7 +84,7 @@
                             <span class="small fw-bold">{{course.title}}</span>
                             <span class="small">{{getCoursePercentange(course.averageRating.$numberDecimal??0)}}%</span>
                         </div>
-                        <div class="completion-bar"><div class="completion-fill" style="width: 92%" [ngStyle]="{'width': `${getCoursePercentange(course.averageRating)}%`}"></div></div>
+                        <div class="completion-bar"><div class="completion-fill"  [ngStyle]="{'width': `${getCoursePercentange(course.averageRating)}%`}"></div></div>
                     </div>
                     }
                 </div>

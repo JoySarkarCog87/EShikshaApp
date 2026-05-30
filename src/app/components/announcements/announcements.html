@@ -2,13 +2,13 @@
   <h3 class="mb-4 text-dark">ANNOUNCEMENTS <i class="bi bi-megaphone-fill text-danger"></i></h3>
 
   <div *ngIf="isInstructor" class="card shadow-sm mb-5 p-4 border-0 bg-light">
-    <h5 class="text-primary mb-3">Create New Announcement</h5>
+    <h5 class="text-success mb-3">Create New Announcement</h5>
 
     <form [formGroup]="announcementForm" (ngSubmit)="postAnnouncement()">
 
       <div class="mb-3">
         <label class="form-label fw-bold text-secondary small">Target Specific Course Channel</label>
-        <select formControlName="courseId" class="form-select border-primary-subtle shadow-sm">
+        <select formControlName="courseId" class="form-select border-success-subtle shadow-sm">
           <option value="" disabled>-- Select targeted course --</option>
           <option *ngFor="let course of instructorCourses()" [value]="course.id">
             {{ course.title }} - {{ course.category }}
@@ -28,7 +28,7 @@
 
         <div
           *ngIf="announcementForm.get('messageText')?.touched && announcementForm.get('messageText')?.hasError('minlength')">
-          <small class="text-danger">Announcement minimum 5 characters ka hona chahiye.</small>
+          <small class="text-danger">Announcement should be of minimum 5 characters</small>
         </div>
       </div>
 

@@ -3,6 +3,9 @@
     <div class="card-header bg-success text-white fw-bold py-3">
       Create New Assessment
     </div>
+    @if(isEditMode) {
+    <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Cancel</button>
+    }
     <div class="card-body p-4">
 
       <form [formGroup]="assignmentForm" (ngSubmit)="onPublish()">
@@ -41,7 +44,7 @@
           @if(title?.touched && title?.hasError('minlength')){
           <p class="text text-danger">Title should be of minimum 5 characters</p>
           }
-          
+
 
 
         </div>
@@ -69,6 +72,7 @@
         <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm" [disabled]="assignmentForm.invalid">
           {{ isEditMode ? 'Update Assessment' : 'Publish to Students' }}
         </button>
+
         }
 
       </form>

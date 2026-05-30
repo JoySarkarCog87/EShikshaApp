@@ -1,4 +1,3 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,6 +15,7 @@ import { finalize } from 'rxjs';
   templateUrl: './announcements.html',
   styleUrls: ['./announcements.css']
 })
+
 export class Announcements implements OnInit {
   private userService = inject(UserService);
   private fb = inject(FormBuilder);
@@ -37,9 +37,9 @@ export class Announcements implements OnInit {
                         }[]|null>(null);
 
   instructorCourses = signal<{ id: string, title: string, category: string }[]>([]);
-  
-  announcementForm!: FormGroup; 
-  isInstructor = false; 
+
+  announcementForm!: FormGroup;
+  isInstructor = false;
 
   ngOnInit() {
     this.announcementForm = this.fb.group({
@@ -47,7 +47,7 @@ export class Announcements implements OnInit {
       messageText: ['', [Validators.required, Validators.minLength(5)]]
     });
 
-  
+
     this.courseService.instructorCoursesList$
       .subscribe(courses => {
         if (courses) this.instructorCourses.set(courses);
@@ -68,11 +68,11 @@ export class Announcements implements OnInit {
             next:res=>{
               this.notifications.set(res.result);
             },
-            error:err=>{
-              console.log(err);
+            error: err => {
+              this.toastService.error(err.message)
             }
           })
-          
+
         })
       }else{
         this.loadingService.isLoading$.next(true)
@@ -91,11 +91,11 @@ export class Announcements implements OnInit {
       }
     });
 
-   
-  }//authentication 
+
+  }
 
   getCourseName(id: string) {
-    return this.instructorCourses().find(c => c.id == id)?.title || 'Selected Course';//selecting course
+    return this.instructorCourses().find(c => c.id == id)?.title || 'Selected Course';
   }
 
   postAnnouncement() {
@@ -108,7 +108,7 @@ export class Announcements implements OnInit {
     .subscribe({
       next: (res) => {
         this.announcementForm.reset({ courseId: '', messageText: '' });
-        this.notifications.set([res.result, ...this.notifications()??[]])
+        this.notifications.set([res.result, ...this.notifications() ?? []])
         this.toastService.success("Announcement broadcasted successfully!");
       },
       error: (err) => {

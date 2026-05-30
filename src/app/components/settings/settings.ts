@@ -20,15 +20,15 @@ export class Settings {
   private formBuilder = inject(FormBuilder);
   private loadingService = inject(LoadingService);
 
-  activeUser!:User;
+  activeUser!: User;
   settingsForm = this.formBuilder.group({
     name: ['', []],
-    email : ['', []],
+    email: ['', []],
   })
-  
-  ngOnInit(){
-    this.userService.activeUser$.subscribe(res=>{
-      this.activeUser=res as User;
+
+  ngOnInit() {
+    this.userService.activeUser$.subscribe(res => {
+      this.activeUser = res as User;
       this.settingsForm.get('name')?.setValue(this.activeUser.name);
       this.settingsForm.get('email')?.setValue(this.activeUser.email);
     })
@@ -38,14 +38,18 @@ export class Settings {
     if(!this.settingsForm.valid || !this.settingsForm.dirty) return;
     const {name, email }=this.settingsForm.value;
 
-    let updatedData:{name?:string,email?:string} = {};
+    const { name, email } = this.settingsForm.value;
 
-    if(name && this.activeUser.name!==name){
-      updatedData['name']=name;
+    let updatedData: { name?: string, email?: string } = {};
+
+    if (name && this.activeUser.name !== name) {
+      updatedData['name'] = name;
     }
-    if(email && this.activeUser.email!==email){
-      updatedData['email']=email;
+    if (email && this.activeUser.email !== email) {
+      updatedData['email'] = email;
     }
+
+  if(confirm("Do you want to change ?")){
     this.loadingService.isLoading$.next(true);
     this.userService.updateUserSettings(updatedData)
     .pipe(
@@ -55,17 +59,18 @@ export class Settings {
       next:res=>{
         this.toastService.success(res.message);
       },
-      error:err=>{
-        this.toastService.error(err.error.message||"Settings updation failed");
+      error: err => {
+        this.toastService.error(err.error.message || "Settings updation failed");
       }
     })
+    }
   }
 
-  get password(){
+  get password() {
     return this.settingsForm.get('password');
   }
 
-  get confirmPassword(){
+  get confirmPassword() {
     return this.settingsForm.get('confirmPassword');
   }
 }

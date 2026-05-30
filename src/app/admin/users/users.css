@@ -1,4 +1,4 @@
-/* Card & Search Input Styling */
+
 .card {
     border-radius: 16px;
     overflow: hidden;
@@ -24,7 +24,7 @@
     min-width: 130px;
 }
 
-/* Table Design Refinements */
+
 .table thead th {
     font-size: 0.72rem;
     font-weight: 700;
@@ -38,13 +38,13 @@
     border-bottom: 1px solid #f8f9fa;
 }
 
-/* Custom Soft Colors */
+
 .bg-primary-soft { background-color: #eef4ff !important; }
 .bg-info-soft { background-color: #e7faff !important; }
 .text-primary { color: #0d6efd !important; }
 .text-info { color: #0dcaf0 !important; }
 
-/* Action Buttons */
+
 .btn-action {
     background-color: transparent;
     border: none;

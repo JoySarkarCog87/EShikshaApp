@@ -75,7 +75,7 @@
                     @for(error of password?.errors | keyvalue; track $index){
                         <div class="ps-2 mt-1">
                             <small class="text-danger fw-bold animate__animated animate__fadeIn">
-                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{password?.errors?.[error.key]}}
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{error.value}}
                             </small>
                         </div>
                     }

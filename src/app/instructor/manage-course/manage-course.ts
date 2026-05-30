@@ -15,6 +15,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
   styleUrl: './manage-course.css',
 })
 export class ManageCourse {
+
   private fb = inject(FormBuilder);
   private courseService = inject(CourseService);
   private userService=inject (UserService);
@@ -58,16 +59,7 @@ export class ManageCourse {
   }
    
   onSubmit() {
-    console.log(this.courseForm.value);
     const {title,category,description ,imageUrl}=this.courseForm.value;
-    
-    if(this.isEditMode()){
-    //  console.log(this.courseForm.pristine);
-      if(this.courseForm.pristine){
-        this.toastService.info('No changes detected');
-        return;
-      }
-    }
     
     const updatedData={
       title:title??"",
@@ -135,8 +127,8 @@ export class ManageCourse {
       description: course.description,
       imageUrl:course.imageUrl
     });
-    console.log(course);
-    console.log(course._id);
+    // console.log(course);
+    // console.log(course._id);
 
     this.courseId=course._id;
   }
@@ -144,9 +136,10 @@ export class ManageCourse {
   deleteCourse(id: string) {
     this.courseService.deleteCourse(id).subscribe({
       next:res=>{
-        alert("Do you want to delete");
+        if(confirm("Do you want to delete")){
         this.courseList.update(cArr=>cArr.filter(c=>c._id!==id))
         this.toastService.success(res.message);
+      }
       },
       error:err=>{
         this.toastService.error(err.error.message);

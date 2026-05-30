@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 export class CourseCard {
   course = input<Course>();
 
+
   getCourseDetailsPageLink = (coursId:string)=>{
     return `./coursedetails/${coursId}`
   }

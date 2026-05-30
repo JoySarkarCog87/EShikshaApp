@@ -2,7 +2,7 @@
     
     <div class="row mb-4 align-items-end">
         <div class="col-lg-8">
-            <h3 class="fw-bold mb-1">Student Progress</h3>
+            <h3 class="fw-bold mb-1">Students Progress</h3>
             <p class="text-muted">Monitor and analyze student performance across your enrolled courses.</p>
         </div>
         <div class="col-lg-4 text-lg-end">
@@ -62,7 +62,7 @@
                                 </div>
                                 <div>
                                     <h5 class="mb-0 fw-bold">{{getRiskStudentCount()}}</h5>
-                                    <small class="text-muted">At Risk Students</small>
+                                    <small class="text-muted">Students in Risk</small>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
             
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white py-3 border-0">
-                        <h5 class="mb-0 fw-bold">Detailed Performance</h5>
+                        <h5 class="mb-0 fw-bold">All Student Performance</h5>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle table-nowrap mb-0">
@@ -80,7 +80,6 @@
                                     <th class="ps-4">Student</th>
                                     <th>Course Status</th>
                                     <th>Modules Done</th>
-                                    <!-- <th>Quiz Average</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -102,7 +101,6 @@
                                         <small class="text-muted">{{((sdata?.completedModule/data?.totalModules)*100).toFixed(2)}}% Complete</small>
                                     </td>
                                     <td><span class="fw-medium">{{sdata?.completedModule}}/{{data?.totalModules}}</span></td>
-                                    <!-- <td><span class="text-success fw-bold">94%</span></td> -->
                                 </tr>
                                 }
                             </tbody>

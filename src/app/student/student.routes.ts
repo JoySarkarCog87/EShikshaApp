@@ -5,7 +5,6 @@ export const studentRoutes : Routes = [
         {path:"", redirectTo:"student", pathMatch:"full"},
         {path:"student", loadComponent:()=>import("./studashboard/studashboard").then(r=>r.Studashboard)},
         {path:"coursecatalog", loadComponent:()=>import("../components/course-catalog/course-catalog").then(r=>r.CourseCatalog)},
-        {path:"coursecatalog/coursedetails/:courseId", loadComponent:()=>import("../components/course-details/course-details").then(r=>r.CourseDetails)},
         {path:"settings", loadComponent:()=>import("../components/settings/settings").then(r=>r.Settings)},
         {path:"announcement",loadComponent:()=>import("../components/announcements/announcements").then(r=>r.Announcements)},
         {path:"chat-box", loadComponent:()=>import("../components/chat-box/chat-box.component").then(r=>r.ChatBoxComponent)},

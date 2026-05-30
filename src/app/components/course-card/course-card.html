@@ -1,6 +1,6 @@
 <div class="col">
   <div class="card h-100 border-0 shadow-lg custom-hover-card rounded-4 overflow-hidden">
-    <!-- Image Section with Aspect Ratio Fix -->
+  
     <div class="position-relative overflow-hidden" style="height: 200px;">
       <img 
         [src]="course()?.imageUrl" 
@@ -8,7 +8,7 @@
         [alt]="course()?.title"
         onerror="this.src='https://placehold.co/600x400?text=No+Image+Available'"
       >
-      <!-- Floating Badge -->
+     
       <div class="position-absolute top-0 start-0 m-3">
         <span class="badge rounded-pill bg-dark bg-opacity-75 backdrop-blur px-3 py-2 text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">
           {{course()?.category}}
@@ -17,9 +17,9 @@
     </div>
 
     <div class="card-body p-4">
-      <!-- Instructor & Rating Row -->
+  
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <!-- Beautified Instructor -->
+        
         <div class="d-flex align-items-center">
           <div class="avatar-circle me-2 bg-success bg-opacity-10 d-flex align-items-center justify-content-center border border-success border-opacity-25">
              <i class="bi bi-person-fill text-success"></i>
@@ -27,7 +27,7 @@
           <span class="fw-bold text-secondary small">{{course()?.instructor?.name}}</span>
         </div>
         
-        <!-- Rating -->
+        
         <div class="small fw-semibold text-dark">
           <i class="bi bi-star-fill text-warning me-1"></i>
           {{course()?.rating?.average?.$numberDecimal || course()?.rating?.average || 0}} 
