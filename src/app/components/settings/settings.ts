@@ -1,12 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../services/user-service';
-import { User } from '../../models/user';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RegisterFormValidator } from '../../validators/register-form-validator';
-import { KeyValuePipe } from '@angular/common';
-import { LoadingService } from '../../services/loading-service';
 import { finalize } from 'rxjs';
+import { User } from '../../models/user';
+import { LoadingService } from '../../services/loading-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-settings',
@@ -36,8 +34,6 @@ export class Settings {
 
   updateProfile(){
     if(!this.settingsForm.valid || !this.settingsForm.dirty) return;
-    const {name, email }=this.settingsForm.value;
-
     const { name, email } = this.settingsForm.value;
 
     let updatedData: { name?: string, email?: string } = {};

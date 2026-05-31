@@ -2,13 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user-service';
-import { User } from '../../models/user';
-import { RegisterFormValidator } from '../../validators/register-form-validator';
-import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from '../../services/loading-service';
-import { finalize } from 'rxjs';
 import { isArray } from 'chart.js/helpers';
+import { ToastrService } from 'ngx-toastr';
+import { User } from '../../models/user';
+import { LoadingService } from '../../services/loading-service';
+import { UserService } from '../../services/user-service';
+import { RegisterFormValidator } from '../../validators/register-form-validator';
 
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
-import { LoadingService } from './services/loading-service';
+import { RouterModule } from '@angular/router';
 import { Loading } from './components/loading/loading';
+import { LoadingService } from './services/loading-service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,6 @@ import { Loading } from './components/loading/loading';
 })
 export class App {
   protected readonly title = signal('E-Shiksha');
-  // Custom services
   private loadingService = inject(LoadingService);
 
   loading = signal<boolean>(false);

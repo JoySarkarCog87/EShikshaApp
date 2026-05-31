@@ -2,12 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 import { CourseService } from '../../services/course-service';
 import { DashboardServices } from '../../services/dashboard-services';
-import { ToastrService } from 'ngx-toastr';
-import { RouterModule } from '@angular/router';
 import { LoadingService } from '../../services/loading-service';
-import { finalize } from 'rxjs';
 
 
 @Component({
@@ -50,7 +49,6 @@ export class Insdashboard {
       },
       error:err=>{
         this.toastService.error(err.message);
-        //console.log(err);
       }
     })
   }

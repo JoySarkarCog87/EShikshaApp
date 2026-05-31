@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ChatData } from '../models/chatModel';
 import { ApiServices } from './api-services';
 import { UserService } from './user-service';
-import { ChatData } from '../models/chatModel';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

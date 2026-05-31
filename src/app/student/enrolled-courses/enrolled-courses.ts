@@ -1,13 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CourseService } from '../../services/course-service';
-import { finalize, Observable } from 'rxjs';
-import { Course } from '../../models/course';
-import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user-service';
 import { ToastrService } from 'ngx-toastr';
+import { finalize, Subscription } from 'rxjs';
 import { EnrolledCourse } from '../../models/enrolledCourse';
+import { CourseService } from '../../services/course-service';
 import { LoadingService } from '../../services/loading-service';
 
 @Component({
@@ -23,14 +20,18 @@ export class EnrolledCourses {
 
   courseList = signal<EnrolledCourse[]>([]);
   activeTab:string = 'all';
+  subscribers = new Subscription();
 
   ngOnInit(): void {
-    this.courseService.studentCourses$.subscribe(res => {
+    this.subscribers = this.courseService.studentCourses$
+    .subscribe(res => {
       if (!res) {
         this.loadingService.isLoading$.next(true);
         this.courseService.getEnrolledCourse()
         .pipe(
-          finalize(()=>this.loadingService.isLoading$.next(false))
+          finalize(()=>{
+            this.loadingService.isLoading$.next(false);
+          })
         )
         .subscribe({
           next: courseResult => {
@@ -67,6 +68,10 @@ export class EnrolledCourses {
         }
       })
     this.activeTab=filterName;
+  }
+
+  ngOnDestroy(){
+    this.subscribers.unsubscribe()
   }
 }
 

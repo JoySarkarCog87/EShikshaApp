@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CourseService } from '../../services/course-service';
-import { map } from 'rxjs';
-import { AssignmentService } from '../../services/assignment-service';
 import { ToastrService } from 'ngx-toastr';
-import { Assignments } from '../../models/assignments';
 import { AssignmentsResult } from '../../models/assignmentResult';
+import { Assignments } from '../../models/assignments';
+import { AssignmentService } from '../../services/assignment-service';
+import { CourseService } from '../../services/course-service';
 
 @Component({
   selector: 'app-manage-assignemts',
@@ -59,10 +58,8 @@ export class ManageAssignemts {
 
     this.assignmentForm.get('courseId')?.valueChanges.subscribe(courseId => {
       if (courseId) {
-        // console.log("running");
         this.assignmentService.searchAssignment(courseId).subscribe({
           next: (res) => {
-            //console.log(res.result);
             this.publishedAssignments.set(res.result);
           },
           error: (err) => {
@@ -88,12 +85,6 @@ export class ManageAssignemts {
 
   get totalMarks() {
     return this.assignmentForm.get("totalMarks");
-  }
-
-  get filteredAssignments() {
-    const selectedCourseId = this.assignmentForm.get('courseId')?.value;
-    if (!selectedCourseId) return [];
-    return this.publishedAssignments().filter(a => a.courseId === selectedCourseId);
   }
 
   //==========================================================================================
@@ -138,11 +129,11 @@ export class ManageAssignemts {
       if (this.assignmentForm.pristine && !this.selectedFile) {
         this.toastService.info("No changes detected");
         return;
-       }
+      }
       this.assignmentService.updateAssignments(formData, courseId, this.currentEditAssignmentId).subscribe({
         next: (res) => {
           this.toastService.success("Updated successfully");
-          
+
           this.resetForm();
           this.assignmentForm.get('courseId')?.setValue(courseId);
         }
@@ -172,7 +163,6 @@ export class ManageAssignemts {
   }
 
   onDelete(id: string | undefined) {
-    //console.log(id);
     const courseId = this.assignmentForm.get('courseId')?.value;
     if (id && courseId && confirm('Permanently delete this assessment?')) {
       this.assignmentService.deleteAssignment(id, courseId).subscribe({
@@ -203,15 +193,6 @@ export class ManageAssignemts {
 
   }
 
-
-  // onDownload(assignment: any) {
-  //   const courseId = this.assignmentForm.get('courseId')?.value;
-  //   if (assignment.file && courseId) {
-  //     this.assignmentService.downloadAssignment(courseId, assignment.file);
-  //   }
-  // }
-
-
   onDownload(assignment: any) {
     const courseId = this.assignmentForm.get('courseId')?.value;
     if (!assignment.file || !courseId) return;
@@ -234,20 +215,18 @@ export class ManageAssignemts {
         window.URL.revokeObjectURL(downloadUrl);
       },
       error: (err) => {
-        console.error('Download failed', err);
         this.toastService.error("Failed to download file.");
       }
     });
   }
 
   getCurrentDate(): string {
-
     const today = new Date();
+    today.setDate(today.getDate() + 3);
     const year = today.getFullYear();
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = (today.getDate() + 3).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-
   }
 
 
@@ -258,20 +237,14 @@ export class ManageAssignemts {
       return;
     }
     this.assignmentService.giveMarks(result._id, this.assignmentForm.get('courseId')?.value, givenMarks).subscribe({
-      next: (res) => {
+      next: (_) => {
         this.toastService.success("Marks set");
         this.AssignmentResponses.update(asr => asr.filter(e => e._id !== result._id));
       },
-      error: (err) => {
-        // console.log(this.maximumMarks());
-        // console.log(err);
+      error: (_) => {
         this.toastService.warning("Problem while submitting marks");
       }
     })
-
-
-
-
   }
 
   downloadStudentDocument(result: AssignmentsResult) {
@@ -303,27 +276,16 @@ export class ManageAssignemts {
 
   }
 
-
-  // onDeleteResponse(resultId:string){}
-
   viewResponse(assignment: any) {
     this.viewResponses = !this.viewResponses;
-
-    console.log(assignment);
-
     this.assignmentService.searchResult(assignment.course, assignment._id).subscribe(
       {
         next: (result) => {
           this.AssignmentResponses.set(result.result);
           this.maximumMarks.set(assignment.totalMarks);
-          //  console.log(this.AssignmentResponses());
-
-          //  this.studentName=this.AssignmentResponses().student.name;
-          //  this.studentId=this.AssignmentResponses().student._id;
         },
-        error: (error) => {
+        error: (_) => {
           this.toastService.error("No assignment Found");
-
         }
       }
     )

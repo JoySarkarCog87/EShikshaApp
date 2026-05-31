@@ -1,13 +1,11 @@
-// import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-// @Injectable()
-
+@Injectable()
 export class RegisterFormValidator {
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
-
 
     if (!password || !confirmPassword) return null;
 

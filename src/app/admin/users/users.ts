@@ -1,12 +1,12 @@
-import { Component, inject, signal } from '@angular/core';
-import { User } from '../../models/user';
-import { UserService } from '../../services/user-service';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { combineLatest, debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import { Component, inject, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { combineLatest, debounceTime, distinctUntilChanged, finalize, startWith, switchMap, tap } from 'rxjs';
+import { User } from '../../models/user';
 import { LoadingService } from '../../services/loading-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-users',

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { finalize } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { ChatData } from '../../models/chatModel';
 import { ChatService } from '../../services/chat-service';
 import { LoadingService } from '../../services/loading-service';
 import { UserService } from '../../services/user-service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chat-box',
@@ -26,6 +26,7 @@ export class ChatBoxComponent {
   isLoading = signal<boolean>(false);
   userPrompt: string = '';
   botStatus = signal<string>('');
+  subscriptions = new Subscription();
 
   ngOnInit(){
     this.loadingService.isLoading$.next(true);
@@ -39,15 +40,18 @@ export class ChatBoxComponent {
         this.isLoading.set(true);
         this.userService.activeUser$.subscribe(user=>{
           this.messages.update(marr=>[...marr, new ChatData('user', [{text:`this is userDetails by system name=${user?.name}, role=${user?.role}`}])]);
-          this.chatService.getChatResponse(this.messages())
+          this.subscriptions = this.chatService.getChatResponse(this.messages())
           .pipe(
-            finalize(()=>this.isLoading.set(false))
+            finalize(()=>{
+              this.isLoading.set(false);
+              this.subscriptions.unsubscribe();
+            })
           )
           .subscribe({
             next:resultData=>{
               this.messages().push(new ChatData('model', [{text:resultData.result}]))
             },
-            error: err=>{
+            error: _=>{
               this.messages.update(marr=>{
                 marr.pop();
                 return marr;

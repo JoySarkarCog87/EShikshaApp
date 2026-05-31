@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ApiServices } from './api-services';
 import { Observable } from 'rxjs';
 import { Quiz } from '../models/quiz';
 import { QuizResponse } from '../models/quizResponse';
+import { ApiServices } from './api-services';
 
 @Injectable({
   providedIn: 'root',

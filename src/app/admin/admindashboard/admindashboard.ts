@@ -1,11 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { LoadingService } from '../../services/loading-service';
-import { DashboardServices } from '../../services/dashboard-services';
-import { CommonModule} from '@angular/common';
-import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
+import { DashboardServices } from '../../services/dashboard-services';
+import { LoadingService } from '../../services/loading-service';
 
 
 @Component({

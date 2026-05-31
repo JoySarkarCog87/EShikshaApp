@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { Course } from '../../models/course';
 import { RouterModule } from '@angular/router';
+import { Course } from '../../models/course';
 
 @Component({
   selector: 'app-course-card',

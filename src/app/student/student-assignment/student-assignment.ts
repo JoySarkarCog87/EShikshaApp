@@ -2,9 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AssignmentService } from '../../services/assignment-service';
 import { Assignments } from '../../models/assignments';
-import { CourseService } from '../../services/course-service';
+import { AssignmentService } from '../../services/assignment-service';
 
 
 @Component({
@@ -40,14 +39,13 @@ export class StudentAssignment {
     this.assignmentService.selectedAssignment$.subscribe({
       next: (res) => {
         this.assignedAssignment.set(res);
-        console.log(this.assignedAssignment())
         this.assignmentTitle = this.assignedAssignment()?.title;
         this.dueDate = String(this.assignedAssignment()?.dueDate).split('T')[0];
         this.totalMarks = this.assignedAssignment()?.totalMarks;
         this.fileId = this.assignedAssignment()?.file;
         this.AssignmentId = this.assignedAssignment()?._id;
       },
-      error: (err) => {
+      error: (_) => {
         this.assignedAssignment.set(null);
       }
     })
@@ -85,7 +83,6 @@ export class StudentAssignment {
   }
 
   onFileSelected(event: any): void {
-    console.log(event.target.files);
     const file = event.target.files[0];
     if (file && file.type === 'application/pdf') {
       this.selectedFile = file;
@@ -102,10 +99,10 @@ export class StudentAssignment {
 
     this.assignmentService.uploadStudentAsignment(formData, this.courseId, this.AssignmentId).subscribe(
       {
-        next:(res)=>{
+        next:(_)=>{
           this.toastService.success("Assignment Submitted Successfully")
         },
-        error:(err)=>{
+        error:(_)=>{
           this.toastService.error("You have already uploaded the assignment");
         }
       }

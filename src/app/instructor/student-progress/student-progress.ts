@@ -3,9 +3,6 @@ import { Component, inject, signal } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { CourseService } from '../../services/course-service';
-import { map } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../services/loading-service';
 
 @Component({
@@ -69,7 +66,6 @@ export class StudentProgress {
     if(this.studentsProgressData()?.students?.length===0 || this.studentsProgressData()?.totalModules===0)return 0;
    
     return this.studentsProgressData()?.students?.filter((s:any)=>{
-      //console.log(s.completedModule/this.studentsProgressData()?.totalModules)
       if((s.completedModule/this.studentsProgressData()?.totalModules)<0.1)return s;
     }).length;
   }

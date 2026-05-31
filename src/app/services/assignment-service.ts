@@ -1,10 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Course } from '../models/course';
-import { ApiServices } from './api-services';
-import { Assignments } from '../models/assignments';
 import { AssignmentsResult } from '../models/assignmentResult';
+import { Assignments } from '../models/assignments';
+import { ApiServices } from './api-services';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +44,6 @@ export class AssignmentService {
 
   //working
   downloadAssignmentInstructor(courseId: string, fileId: string | undefined): Observable<Blob> {
-
     const url = this.apiServices.getFullUrl(`instructor/course/${courseId}/assignment/download/${fileId}`);
     return this.httpClient.get(url, { responseType: 'blob' });
   }
@@ -80,7 +78,6 @@ export class AssignmentService {
 
   
   giveMarks(resultId: string,courseId:string, marks: number) {
-    //console.log(marks);
     return this.httpClient.patch<{ result: AssignmentsResult, message: string }>(
       this.apiServices.getFullUrl(`instructor/course/${courseId}/assignment-result/${resultId}`),
       { marks }

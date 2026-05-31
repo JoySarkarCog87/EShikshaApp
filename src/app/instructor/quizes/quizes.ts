@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CourseService } from '../../services/course-service';
-import { map } from 'rxjs';
-import { QuizService } from '../../services/quiz-service';
 import { ToastrService } from 'ngx-toastr';
 import { Quiz } from '../../models/quiz';
+import { CourseService } from '../../services/course-service';
+import { QuizService } from '../../services/quiz-service';
 
 @Component({
   selector: 'app-quizes',
@@ -183,17 +182,15 @@ export class Quizes {
   }
 
   getCurrentDate(): string {
-    
     const today = new Date();
+    today.setDate(today.getDate() + 3);
     const year = today.getFullYear();
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = (today.getDate()+3).toString().padStart(2, '0');
-
+    const day = today.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
   getQuizesByCourseId(event:any){
-    // console.log(event.target.value);
     this.quizService.getQuizes(event.target.value).subscribe({
       next:res=>{
         this.quizList.set(res.result);

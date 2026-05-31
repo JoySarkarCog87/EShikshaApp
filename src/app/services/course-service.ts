@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ApiServices } from './api-services';
-import { Course } from '../models/course';
-import { BehaviorSubject, combineLatest, firstValueFrom, map, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Assignments } from '../models/assignments';
+import { Course } from '../models/course';
 import { EnrolledCourse } from '../models/enrolledCourse';
+import { ApiServices } from './api-services';
 import { UserService } from './user-service';
 
 @Injectable({

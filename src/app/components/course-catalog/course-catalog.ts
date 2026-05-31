@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CourseCard } from '../course-card/course-card';
-import { CourseService } from '../../services/course-service';
-import { Course } from '../../models/course';
-import { LoadingService } from '../../services/loading-service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, finalize } from 'rxjs';
+import { RouterModule } from '@angular/router';
+import { debounceTime, finalize, startWith } from 'rxjs';
+import { Course } from '../../models/course';
+import { CourseService } from '../../services/course-service';
+import { LoadingService } from '../../services/loading-service';
+import { CourseCard } from '../course-card/course-card';
 
 @Component({
   selector: 'app-course-catalog',
@@ -22,16 +22,14 @@ export class CourseCatalog {
   searchQuery = new FormControl('');
 
   ngOnInit(){
-    this.getCourses();
-
     this.searchQuery.valueChanges
     .pipe(
-      debounceTime(400)
+      debounceTime(400),
+      startWith("")
     )
     .subscribe(svalue=>{
       this.getCourses(svalue??"");
     })
-    
   }
 
 

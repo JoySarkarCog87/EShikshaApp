@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { isArray } from 'chart.js/helpers';
+import { ToastrService } from 'ngx-toastr';
+import { combineLatest, switchMap } from 'rxjs';
 import { Course } from '../../models/course';
 import { CourseService } from '../../services/course-service';
 import { UserService } from '../../services/user-service';
-import { ToastrService } from 'ngx-toastr';
-import { isArray } from 'chart.js/helpers';
-import { combineLatest, switchMap } from 'rxjs';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-manage-course',
@@ -23,7 +23,7 @@ export class ManageCourse {
 
 
   isEditMode = signal(false);
-  oldCourseName = ""; // Used to find the course in the list if the name is changed
+  oldCourseName = "";
   courseId="";
   pageNumber = signal<number>(1);
   totalCourses = 0;
@@ -127,9 +127,6 @@ export class ManageCourse {
       description: course.description,
       imageUrl:course.imageUrl
     });
-    // console.log(course);
-    // console.log(course._id);
-
     this.courseId=course._id;
   }
    
@@ -137,9 +134,9 @@ export class ManageCourse {
     this.courseService.deleteCourse(id).subscribe({
       next:res=>{
         if(confirm("Do you want to delete")){
-        this.courseList.update(cArr=>cArr.filter(c=>c._id!==id))
-        this.toastService.success(res.message);
-      }
+          this.courseList.update(cArr=>cArr.filter(c=>c._id!==id))
+          this.toastService.success(res.message);
+        }
       },
       error:err=>{
         this.toastService.error(err.error.message);

@@ -1,16 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CourseService } from '../../services/course-service';
-import { Course } from '../../models/course';
-import { Assignments } from '../../models/assignments';
-import { CommonModule} from '@angular/common';
-import { AssignmentService } from '../../services/assignment-service';
-import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../services/user-service';
-import { combineLatest, finalize, map, Observable } from 'rxjs';
-import { TokenService } from '../../services/token-service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { combineLatest, finalize, map, Observable } from 'rxjs';
+import { Assignments } from '../../models/assignments';
+import { Course } from '../../models/course';
+import { AssignmentService } from '../../services/assignment-service';
+import { CourseService } from '../../services/course-service';
 import { LoadingService } from '../../services/loading-service';
+import { TokenService } from '../../services/token-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-course-details',
@@ -112,7 +112,6 @@ export class CourseDetails {
 
   goToSubmitAssignment(assignment:Assignments) {
     this.assignmentService.selectedAssignment$.next(assignment);
-    console.log(assignment);
     this.router.navigate(
       ['/dashboard/enrolledcourses/coursedetails', this.courseId1, 'assignment', assignment._id]
     );

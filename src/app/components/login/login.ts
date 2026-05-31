@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user-service';
-import { AuthUser } from '../../models/authUser';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from '../../services/loading-service';
 import { finalize } from 'rxjs';
+import { AuthUser } from '../../models/authUser';
+import { LoadingService } from '../../services/loading-service';
 import { TokenService } from '../../services/token-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-login',

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user-service';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CourseService } from '../../services/course-service';
 import { ToastrService } from 'ngx-toastr';
-import { AnnouncementService } from '../../services/announcement-service';
-import { LoadingService } from '../../services/loading-service';
 import { finalize } from 'rxjs';
+import { AnnouncementService } from '../../services/announcement-service';
+import { CourseService } from '../../services/course-service';
+import { LoadingService } from '../../services/loading-service';
+import { UserService } from '../../services/user-service';
 
 
 @Component({
@@ -15,8 +16,7 @@ import { finalize } from 'rxjs';
   templateUrl: './announcements.html',
   styleUrls: ['./announcements.css']
 })
-
-export class Announcements implements OnInit {
+export class Announcements{
   private userService = inject(UserService);
   private fb = inject(FormBuilder);
   private courseService = inject(CourseService);

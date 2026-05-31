@@ -1,17 +1,17 @@
-import { Component, inject, input} from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user-service';
-import { User } from '../../models/user';
 import { LowerCasePipe } from '@angular/common';
+import { Component, inject, input } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from '../../services/loading-service';
 import { finalize } from 'rxjs';
-import { TokenService } from '../../services/token-service';
+import { User } from '../../models/user';
 import { CourseService } from '../../services/course-service';
+import { LoadingService } from '../../services/loading-service';
+import { TokenService } from '../../services/token-service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterModule,LowerCasePipe],
+  imports: [RouterModule, LowerCasePipe],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
@@ -43,13 +43,12 @@ export class Sidebar {
     this.userService.logout().pipe(
       finalize(()=>this.loadingService.isLoading$.next(false))
     ).subscribe({
-         next:(res)=>{
+         next:(_)=>{
           this.tokenService.eshikshaToken = "";
           this.courseService.studentCourses$.next(null);
           this.router.navigateByUrl("");
-          this.toastService.warning(res.message);
          },
-         error:(err)=>{
+         error:(_)=>{
           this.toastService.error("problem during logout")
          }
     }

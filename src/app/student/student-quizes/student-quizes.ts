@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { QuizService } from '../../services/quiz-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Quiz } from '../../models/quiz';
 import { QuizResponse } from '../../models/quizResponse';
-import { ToastrService } from 'ngx-toastr';
 import { CourseService } from '../../services/course-service';
+import { QuizService } from '../../services/quiz-service';
 
 
 @Component({
