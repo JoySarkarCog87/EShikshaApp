@@ -74,6 +74,10 @@ export class CourseDetails {
   }
 
   enroll() {
+    if(!this.tokenService.eshikshaToken){
+      this.router.navigateByUrl("login");
+      return;
+    }
     this.courseService.enrollCourse(this.courseId1).subscribe({
       next:res=>{
         const currentCourses = this.courseService.studentCourses$.getValue()??[];
@@ -85,7 +89,7 @@ export class CourseDetails {
         this.toastService.success(`Successfully enrolled in ${this.selectedCourse()?.course?.title||""}!`);
       },
       error:err=>{
-        let message = err?.error?.message;
+        let message = err?.error?.message??"";
         if(message.match("duplicate key")){
           message = "You already enrolled in this course";
         }
